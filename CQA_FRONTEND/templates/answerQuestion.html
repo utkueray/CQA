@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CQA ML</title>
+
+    <!-- Font Awesome Icons -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-auth.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+    <!-- Plugin CSS -->
+    <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+
+    <!-- Theme CSS - Includes Bootstrap -->
+    <link href="css/creative.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top" style="background-color: #343a40">
+
+<!-- Navigation -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center">
+        <div class="sidebar-brand-text mx-3">CQA ML Project</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'dashboard' %}">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Components</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Custom Components:</h6>
+            <a class="collapse-item" href="{% url 'askQuestions' %}">Ask Question</a>
+            <a class="collapse-item" href="{% url 'answerQuestions' %}">Answer Questions</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+
+<!-- Masthead -->
+<header class="page-section bg-dark">
+    <div class="container h-100" >
+        <div class="row h-100 align-items-center justify-content-center text-center">
+
+
+        </div>
+    </div>
+</header>
+
+<!-- Result Section -->
+<section class="page-section bg-primary" id="results">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="text-white mt-0">Result:</h2>
+
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDtwTnubIQEzMqpAUkFFutjMuMuIv6XXGw",
+        authDomain: "ml-project-5d45f.firebaseapp.com",
+        databaseURL: "https://ml-project-5d45f.firebaseio.com",
+        projectId: "ml-project-5d45f",
+        storageBucket: "ml-project-5d45f.appspot.com",
+        messagingSenderId: "400409746476",
+        appId: "1:400409746476:web:ba562b62ec81bcf6a84589",
+        measurementId: "G-8J9J7JHNJR"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    var database = firebase.database();
+
+    function writeDB() {
+        let qTitle = document.getElementById('qTitle').value;
+        let qText = document.getElementById('qText').value;
+        let id = 0;
+        console.log(qTitle, qText);
+        database.ref('data/' + id).set({
+            questionTitle: qTitle,
+            questionText : qText
+        });
+    }
+</script>
+
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Plugin JavaScript -->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="js/creative.min.js"></script>
+
+</body>
+
+</html>
