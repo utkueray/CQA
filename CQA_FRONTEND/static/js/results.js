@@ -154,40 +154,60 @@ function dataTable(data) {
         answer_count = data.items[j].answer_count;
         if (accepted_answer_id !== undefined) {
 
-        $('#tbody-results').append(
-            $('<tr>').attr('href', link).attr('target', '_blank').append(
-                $('<td>').addClass('m-0 font-weight-bold text-success').text(score + "%"),
-                $('<td>').html(title),
-                $('<td>').text(date)
-            ))
+            $('#tbody-results').append(
+                $('<tr>').attr('href', link).attr('target', '_blank').append(
+                    $('<td>').addClass('m-0 font-weight-bold text-success').text("Verified Answer"),
+                    $('<td>').addClass('m-0 font-weight-bold text-success').text(score + "%"),
+                    $('<td>').html(title),
+                    $('<td>').text(date)
+                ))
         } else if (answer_count > 0) {
 
-        $('#tbody-results').append(
-            $('<tr>').attr('href', link).attr('target', '_blank').append(
-                $('<td>').addClass('m-0 font-weight-bold text-warning').text(score + "%"),
-                $('<td>').html(title),
-                $('<td>').text(date)
-            ))
+            $('#tbody-results').append(
+                $('<tr>').attr('href', link).attr('target', '_blank').append(
+                    $('<td>').addClass('m-0 font-weight-bold text-warning').text("Unverified Answers"),
+                    $('<td>').addClass('m-0 font-weight-bold text-warning').text(score + "%"),
+                    $('<td>').html(title),
+                    $('<td>').text(date)
+                ))
 
         } else {
 
-        $('#tbody-results').append(
-            $('<tr>').attr('href', link).attr('target', '_blank').append(
-                $('<td>').addClass('m-0 font-weight-bold text-danger').text(score + "%"),
-                $('<td>').html(title),
-                $('<td>').text(date)
-            ))
+            $('#tbody-results').append(
+                $('<tr>').attr('href', link).attr('target', '_blank').append(
+                    $('<td>').addClass('m-0 font-weight-bold text-danger').text("Not Answered"),
+                    $('<td>').addClass('m-0 font-weight-bold text-danger').text(score + "%"),
+                    $('<td>').html(title),
+                    $('<td>').text(date)
+                ))
         }
     }
 
 
     $('#dt-filter-select').dataTable({
-        order: [[0, "desc"]],
+        order: [[1, "desc"]],
+        bFilter: true,
+        columnDefs: [
+            {
+                targets: [0],
+                searchable: true,
+                visible: true,
+            },
+            {
+                targets: [3],
+                render: function (data, type, row) {
+                    if (type === 'sort') {
+                        return Date.parse(data);
+                    }
+                    return data;
+                }
+            }
+        ],
         initComplete: function () {
             this.api().columns().every(function () {
                 var column = this;
                 var select = $('<select  class="browser-default custom-select form-control-sm"><option value="" selected>All</option></select>')
-                    .appendTo($(column.footer()).empty())
+                    .appendTo($(column.footer()))
                     .on('change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(
                             $(this).val()
@@ -206,19 +226,4 @@ function dataTable(data) {
         },
     });
 
-    $('#example tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = table.row( tr );
-
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-            // Open this row
-            row.child( format(row.data()) ).show();
-            tr.addClass('shown');
-        }
-    } );
 }

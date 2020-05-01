@@ -44,7 +44,7 @@ def results(request, derived_userReputation, derived_userViews, derived_userUpVo
 
     doc = title + question + tags
 
-    model = gensim.models.doc2vec.Doc2Vec.load("D:\stackoverflow.com\CQA\CQA_FRONTEND\doc2vecmodel")
+    model = gensim.models.doc2vec.Doc2Vec.load("CQA_FRONTEND/static/data/doc2vecmodel")
     test_corpus = list(read_corpus([doc], tokens_only=True))
     inferred_vector = model.infer_vector(test_corpus[0])
     sims = model.docvecs.most_similar([inferred_vector], topn=30)
@@ -173,7 +173,7 @@ def willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes
     final_test = final_test.drop(axis=1, columns=["Question", "Title", "Tags"])
     final_test = final_test.drop(axis=1, columns=["Creation Date", "User Creation Date", "User Last Access Date"])
 
-    shuffled_final = pd.read_pickle("D:\stackoverflow.com\CQA\CQA_FRONTEND\shuffled_final")
+    shuffled_final = pd.read_pickle("CQA_FRONTEND/static/data/shuffled_final")
     xtrain = shuffled_final.drop(axis=1, columns=['IsAnswered'])
     labels = shuffled_final['IsAnswered']
 

@@ -19,33 +19,21 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- Custom styles for this template-->
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
     <style>
-        .resultsWrapper {
-            margin: 60px auto;
-            text-align: center;
-        }
-
-        h1 {
-            margin-bottom: 1.25em;
-        }
-
-        #pagination-demo {
-            display: inline-block;
-            margin-bottom: 1.75em;
-        }
-
-        #pagination-demo li {
-            display: inline-block;
-        }
-
-        .page-content {
-            display: inline-block;
-            padding: 10px;
+        textarea {
             width: 100%;
-            max-width: 660px;
         }
 
+        #textwrapper {
+            min-width: 500px;
+        }
     </style>
 </head>
 
@@ -104,7 +92,7 @@
                 </button>
 
                 <!-- Topbar Page Name -->
-                <h2 class="mr-2 d-none d-lg-inline text-uppercase">Dashboard</h2>
+                <h2 class="mr-2 d-none d-lg-inline text-uppercase">Ask Question</h2>
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -155,41 +143,45 @@
 
                         <div class="form-group text-primary">
                             <label>Body:</label>
-                            <div class="wmd-panel" style="width: 500px ;alignment: center">
-                                <div id="wmd-button-bar-second"
-                                     style="background-image: url({% static 'wmd-buttons.png' %})"></div>
-                                <label for="wmd-input-second"></label>
-                                <textarea class="wmd-panel wmd-input" id="wmd-input-second" wrap="hard"
-                                          style="width: 500px"></textarea>
+                            <div id="textwrapper">
+
+                                <div style="min-width: 200px">
+                                    <label for="editor"></label>
+                                    <textarea name="resize-default" class="vertical" id="editor"></textarea>
+                                </div>
                             </div>
-                            <div id="wmd-preview-second" style="width: 500px"></div>
+                        </div>
+                        <label><a name="graceful-degredation"></a>Select tags:</label>
+                        <div>
+                            <input name="tags" id="tagger">
+
                         </div>
                         <button type="button" onclick="return writeDB()" class="btn btn-primary align-content-center">
                             Submit
                         </button>
                     </div>
+
                 </div>
-
-                <hr class="fa-divider">
-
             </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Sabanci University 2019</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Main Content -->
+        <hr class="fa-divider">
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Sabanci University 2019</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
 
     </div>
-    <!-- End of Page Wrapper -->
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
 </div>
 
 <!-- Scroll to Top Button-->
@@ -232,13 +224,16 @@
 <script src="{% static 'Markdown.Editor.js' %}"></script>
 <script type="text/javascript" src="{% static 'Markdown.Sanitizer.js' %}"></script>
 <script type="text/javascript" src="{% static 'Markdown.Editor.js' %}"></script>
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript"
+        charset="utf-8"></script>
 <!-- Custom scripts for all pages-->
 <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
+<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
 <script src="{% static 'js/askQuestions.js' %}"></script>
 
 </body>
-
 </html>
