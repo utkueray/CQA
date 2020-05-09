@@ -17,6 +17,7 @@
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
@@ -58,6 +59,22 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
+
+        <div class="dropdown" style="margin-left: 15px;margin-bottom: 10px">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="true" style="background: #ffffff; color: #0b0b0b">
+                Select Source
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: #ffffff;">
+                <li style="margin: 5px"><a href="#" style="margin: 5px; color: #0b0b0b">Stack Overflow</a></li>
+                <div class="dropdown-divider"></div>
+
+                <li style="margin: 5px"><a href="#" style="margin: 5px; color: #0b0b0b">Artificial Intelligence</a></li>
+                <div class="dropdown-divider"></div>
+
+                <li style="margin: 5px"><a href="#" style="margin: 5px; color: #0b0b0b">Stack Exchange</a></li>
+            </ul>
+        </div>
 
     </ul>
     <!-- End of Sidebar -->
@@ -107,10 +124,8 @@
 
             </nav>
             <!-- End of Topbar -->
-
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
                 <!-- Cards -->
                 <div class="row">
 
@@ -123,8 +138,8 @@
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Account
                                         </div>
                                         <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
-                                                     id="accountType">Registered
-                                                </div>
+                                             id="accountType">Registered
+                                        </div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -188,8 +203,8 @@
                                             Questions
                                         </div>
                                         <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
-                                                     id="userAnswers">0
-                                                </div>
+                                             id="userAnswers">0
+                                        </div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -265,12 +280,12 @@
 
 <!-- Core plugin JavaScript-->
 <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <!-- Custom scripts for all pages-->
 <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
+<script src="{% static 'js/selectSource.js' %}"></script>
 
 </body>
 

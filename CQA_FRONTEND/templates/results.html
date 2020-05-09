@@ -88,6 +88,23 @@
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
+        <div class="dropdown" style="margin-left: 15px;margin-bottom: 10px">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="true" style="background: #ffffff; color: #0b0b0b">
+                Select Source
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: #ffffff;">
+                <li style="margin: 5px"><a href="#" style="margin: 5px; color: #0b0b0b">Stack Overflow</a></li>
+                <div class="dropdown-divider"></div>
+
+                <li style="margin: 5px"><a href="#" style="margin: 5px; color: #0b0b0b">Artificial Intelligence</a></li>
+                <div class="dropdown-divider"></div>
+
+                <li style="margin: 5px"><a href="#" style="margin: 5px; color: #0b0b0b">Stack Exchange</a></li>
+            </ul>
+        </div>
+
+
     </ul>
     <!-- End of Sidebar -->
 
@@ -107,7 +124,7 @@
                 </button>
 
                 <!-- Topbar Page Name -->
-                <h2 class="mr-2 d-none d-lg-inline text-uppercase">Dashboard</h2>
+                <h2 class="mr-2 d-none d-lg-inline text-uppercase">Results</h2>
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -231,23 +248,23 @@
                 </div>
             </div>
 
-        <!-- /.container-fluid -->
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Sabanci University 2019</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
 
     </div>
-    <!-- End of Main Content -->
-
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-                <span>Copyright &copy; Sabanci University 2019</span>
-            </div>
-        </div>
-    </footer>
-    <!-- End of Footer -->
-
-</div>
-<!-- End of Content Wrapper -->
+    <!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->
@@ -309,6 +326,7 @@
 <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
 <script src="{% static 'js/results.js' %}"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
+<script src="{% static 'js/selectSource.js' %}"></script>
 
 </body>
 
