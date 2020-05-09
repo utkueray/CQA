@@ -155,19 +155,55 @@
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
-            <div class="container-fluid">
-                <!-- Markdown Text Editor -->
-                <div id="content">
-                    <h3><a name="graceful-degredation"></a>Select tags:</h3>
-                    <form>
-                        <input name="tags" id="tagger">
-                    </form>
-                    <button type="button" class="btn btn-primary align-content-center">Submit</button>
+
+            <div class=" justify-content-center" style="margin-top: 50px">
+                <div class="card shadow ">
+                    <div class="card-body">
+                        <div>
+                            <h3>Suggestions:</h3>
+                            <p>.</p>
+                            <div class="row">
+                            <div id="" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <hr class="fa-divider">
-
             </div>
+
+            <div class=" justify-content-center"  style="margin-top: 50px">
+                <div class="card shadow ">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <!-- Markdown Text Editor -->
+                            <div id="content">
+                                <h3>Search with Tags:</h3>
+                                <form>
+                                    <label for="tagger"></label><input name="tags" id="tagger">
+                                </form>
+                                <div class="row justify-content-center">
+                                    <button type="button" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class=" justify-content-center" style="margin-top: 50px">
+                <div class="card shadow ">
+                    <div class="card-body">
+                        <div>
+                            <h3>Similar Questions:</h3>
+                            <p>.</p>
+                            <div class="row" style="margin-top: 10px">
+                            <div id="suggestions" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -229,8 +265,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript"
         charset="utf-8"></script>
 <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
+<script src="{% static 'js/tags.js' %}"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
 <script src="{% static 'js/selectSource.js' %}"></script>
+<script src="{% static 'js/answerQuestion.js' %}"></script>
 
 </body>
 
@@ -242,7 +280,7 @@
         $('#tagger').tagit({
             availableTags: sampleTags,
             allowDuplicates: false,
-            placeholderText: null,   // Sets `placeholder` attr on input field.
+            placeholderText: null,   // Se  ts `placeholder` attr on input field.
 
 
         });
