@@ -7,6 +7,8 @@
 
     <!-- Custom fonts for this template-->
     {% load static %}
+        <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet" type="text/css">
+
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -18,7 +20,6 @@
     <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
 
     <style>
         textarea {
@@ -67,21 +68,6 @@
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
-        <div class="dropdown" style="margin-left: 15px;margin-bottom: 10px">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="true" style="background: #ffffff; color: #0b0b0b">
-                Select Source
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: #ffffff;">
-                <li style="margin: 5px"><a href="#" style="margin: 5px; color: #0b0b0b">Stack Overflow</a></li>
-                <div class="dropdown-divider"></div>
-
-                <li style="margin: 5px"><a href="#" style="margin: 5px; color: #0b0b0b">Artificial Intelligence</a></li>
-                <div class="dropdown-divider"></div>
-
-                <li style="margin: 5px"><a href="#" style="margin: 5px; color: #0b0b0b">Stack Exchange</a></li>
-            </ul>
-        </div>
 
     </ul>
     <!-- End of Sidebar -->
@@ -135,10 +121,10 @@
 
 
             <!-- Begin Page Content -->
-            <div class="container-fluid">
+            <div class="container-fluid"  style="width: 1000px">
                 <!-- Markdown Text Editor -->
                 <div class="row h-100 justify-content-center">
-                    <div>
+                    <div style="width: 1000px">
                         <div class="row justify-content-center">
                             <label style="width: 100%"> Be specific and imagine you’re asking a question to another
                                 person.
@@ -151,27 +137,27 @@
                             <input type="text" class="form-control" id="qTitle" name="qTitle">
                         </div>
 
-                        <div class="row form-group text-primary" style="margin-top: 50px">
+                        <div class="row form-group text-primary" style="margin-top: 50px; width: inherit;">
                             <label>Body:</label>
-                            <div id="textwrapper" style="width: 100%">
+                            <div id="textwrapper" style="width: inherit;">
                                 <div>
-                                    <label for="editor"></label>
-                                    <textarea name="resize-default" class="vertical" id="editor"></textarea>
+                                    <textarea id="editor"></textarea>
                                 </div>
                             </div>
                         </div>
-                        <div class="row form-group text-primary">
-                            <div>
-                                                            <label>Select tags:</label>
+                        <div class="row form-group text-primary" style="width: inherit">
+                            <div style="width: inherit">
+                                <label>Select tags:</label>
 
-                                <input name="tags" id="tagger">
+                                <input name="tags" id="tagger" style="width: inherit">
 
                             </div>
                         </div>
-
+                        <div class="row justify-content-center">
                         <button type="button" onclick="return writeDB()" class="btn btn-primary align-content-center">
                             Submit
                         </button>
+                            </div>
                     </div>
 
                 </div>
@@ -227,10 +213,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript"
         charset="utf-8"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript"
+        charset="utf-8"></script>
 <!-- Custom scripts for all pages-->
-<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
 <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/tags.js' %}"></script>
@@ -238,5 +225,20 @@
 <script src="{% static 'js/askQuestions.js' %}"></script>
 <script src="{% static 'js/selectSource.js' %}"></script>
 
+<script>
+    var textarea = document.getElementById("editor");
+
+    textarea.addEventListener("paste", function() {
+
+    if (this.value !== "")
+    {
+        console.log(this.value)
+        this.value = this.value + "\n";
+    }
+
+}, false);
+</script>
+
 </body>
 </html>
+

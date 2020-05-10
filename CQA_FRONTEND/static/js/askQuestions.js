@@ -19,7 +19,7 @@ var simplemde = new SimpleMDE({
         link: ["[", "](http://)"],
         table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"],
     },
-    lineWrapping: false,
+    lineWrapping: true,
     parsingConfig: {
         allowAtxHeaderWithoutSpace: true,
         strikethrough: false,
@@ -41,7 +41,7 @@ var simplemde = new SimpleMDE({
     shortcuts: {
         drawTable: "Cmd-Alt-T"
     },
-    showIcons: ["code", "table"],
+
     spellChecker: false,
     styleSelectedText: false,
     toolbarTips: true,
