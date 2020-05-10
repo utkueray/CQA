@@ -18,6 +18,7 @@
           href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
     <link rel='stylesheet' href='https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'>
 
+
     <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
 
 </head>
@@ -149,7 +150,7 @@
                                 <label for="tagger"></label><input name="tags" id="tagger">
                             </form>
                             <div class="row justify-content-center">
-                                <button type="button" class="btn btn-primary">Submit</button>
+                                <button type="button" class="btn btn-primary" id="tagSubmit">Submit</button>
                             </div>
                         </div>
 
@@ -215,6 +216,10 @@
     </div>
 </div>
 
+
+</body>
+
+
 <!-- Bootstrap core JavaScript-->
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -226,25 +231,16 @@
 <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
 <script src="https://code.jquery.com/jquery-3.5.0.min.js"
         integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"
-        charset="utf-8"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript"
-        charset="utf-8"></script>
-
-<script type='text/javascript' src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
 
 <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/tags.js' %}"></script>
-
 <script src="{% static 'js/dashboard.js' %}"></script>
 <script src="{% static 'js/selectSource.js' %}"></script>
 <script src="{% static 'js/answerQuestion.js' %}"></script>
-
-</body>
-
-
 <script>
     $(function () {
         // singleFieldTags2 is an INPUT element, rather than a UL as in the other
@@ -255,6 +251,16 @@
             placeholderText: null,   // Se  ts `placeholder` attr on input field.
         });
         $("#tagger").tagit("assignedTags")
+
+    });
+
+    $("#tagSubmit").click(function(){
+
+        qTitle = $("#tagger").tagit("assignedTags").join(' ')
+        qText = $("#tagger").tagit("assignedTags").join(' ')
+        tags = $("#tagger").tagit("assignedTags").join(' ')
+
+        window.location = "/results/" + userData.derived_userReputation + "/" + userData.derived_userViews + "/" + userData.derived_userUpVotes + "/" + userData.derived_userDownVotes + "/" + userData.derived_userCreationDate + "/" + userData.derived_userLastAccessDate + "/" + qTitle.split(' ').join('_').replace(/[?=]/g, "") + "/" + qText.split(' ').join('_').replace(/[?=]/g, "") + "/" + tags.split(' ').join('_') + "/"
 
     });
 
@@ -272,5 +278,7 @@
     console.log(resultDict);
 
 </script>
+
+
 
 </html>
