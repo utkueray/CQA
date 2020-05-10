@@ -145,33 +145,36 @@
                 <!-- Markdown Text Editor -->
                 <div class="row h-100 justify-content-center">
                     <div>
-                        <div>
-                            <label style="width: 500px"> Be specific and imagine you’re asking a question to another
+                        <div class="row justify-content-center">
+                            <label style="width: 100%"> Be specific and imagine you’re asking a question to another
                                 person.
                                 Include all the information someone would need to answer your question.
                             </label>
                         </div>
                         <hr class="fa-divider">
-                        <div class="form-group text-primary">
+                        <div class="row form-group text-primary">
                             <label for="qTitle">Title: </label>
                             <input type="text" class="form-control" id="qTitle" name="qTitle">
                         </div>
 
-                        <div class="form-group text-primary">
+                        <div class="row form-group text-primary" style="margin-top: 50px">
                             <label>Body:</label>
-                            <div id="textwrapper">
-
-                                <div style="min-width: 200px">
+                            <div id="textwrapper" style="width: 100%">
+                                <div>
                                     <label for="editor"></label>
                                     <textarea name="resize-default" class="vertical" id="editor"></textarea>
                                 </div>
                             </div>
                         </div>
-                        <label><a name="graceful-degredation"></a>Select tags:</label>
-                        <div>
-                            <input name="tags" id="tagger">
+                        <div class="row form-group text-primary">
+                            <div>
+                                                            <label>Select tags:</label>
 
+                                <input name="tags" id="tagger">
+
+                            </div>
                         </div>
+
                         <button type="button" onclick="return writeDB()" class="btn btn-primary align-content-center">
                             Submit
                         </button>

@@ -3,7 +3,7 @@ import pandas as pd
 import gensim, json
 from sklearn.ensemble import RandomForestClassifier
 from datetime import datetime
-
+import requests
 
 # user date pulled from stackexchange API
 now = datetime.now()
@@ -30,7 +30,36 @@ def askQuestions(request):
 
 
 def answerQuestions(request):
-    return render(request, 'answerQuestion.html')
+    userData = (json.loads(request.COOKIES.get('userData')))
+    # accessToken, stackOverflowID, APIKEY
+    # print(userData["stackOverflowID"], userData["APIKEY"])
+    response = requests.get("https://api.stackexchange.com/2.2/users/"
+                            + str(userData["stackOverflowID"]) +
+                            "/questions?order=desc&sort=activity&site=stackoverflow&filter=!9Z(-wwYGT&key=" +
+                            str(userData["APIKEY"]))
+    # print(json.dumps(response.json()["items"], indent=4, sort_keys=True))
+
+    questionDict = {}
+    for item in response.json()["items"]:
+        # print(item["question_id"],item["tags"], item["title"], item["body"])
+        title = item["title"]
+        question = item["body"]
+        tags = item["tags"]
+        doc = title + question + ' '.join(map(str, tags))
+
+        model = gensim.models.doc2vec.Doc2Vec.load("CQA_FRONTEND/static/data/doc2vecmodel")
+        test_corpus = list(read_corpus([doc], tokens_only=True))
+        inferred_vector = model.infer_vector(test_corpus[0])
+        sims = model.docvecs.most_similar([inferred_vector], topn=5)
+
+        resultDict = {}
+
+        for (key, val) in sims:
+            resultDict[str(key)] = val
+
+        questionDict[str(item["question_id"])] = str(resultDict)
+
+    return render(request, 'answerQuestion.html', context={'questionDict':  questionDict})
 
 
 def results(request, derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
@@ -55,8 +84,8 @@ def results(request, derived_userReputation, derived_userViews, derived_userUpVo
         resultDict[key] = val
 
     answerPercentage = \
-    willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
-                  derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)[1]
+        willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
+                      derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)[1]
     return render(request, 'results.html', context={'resultDict': resultDict, 'answerPercentage': answerPercentage})
 
 
@@ -191,5 +220,5 @@ def willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes
     yNew = rfm.predict_proba(final_test)
     # show the inputs and predicted outputs
     for i in range(len(final_test)):
-        #print(" Predicted=%s" % (yNew[i]))
+        # print(" Predicted=%s" % (yNew[i]))
         return yNew[i]

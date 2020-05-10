@@ -22,6 +22,8 @@
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
           href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+    <link rel='stylesheet' href='https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'>
+
     <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
     <style>
         .resultsWrapper {
@@ -161,28 +163,25 @@
                     <div class="card-body">
                         <div>
                             <h3>Suggestions:</h3>
-                            <p>.</p>
                             <div class="row">
-                            <div id="" style="width: 100%"></div>
+                                <div id="" style="width: 100%"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class=" justify-content-center"  style="margin-top: 50px">
+            <div class="justify-content-center" style="margin-top: 50px">
                 <div class="card shadow ">
                     <div class="card-body">
-                        <div class="container-fluid">
-                            <!-- Markdown Text Editor -->
-                            <div id="content">
-                                <h3>Search with Tags:</h3>
-                                <form>
-                                    <label for="tagger"></label><input name="tags" id="tagger">
-                                </form>
-                                <div class="row justify-content-center">
-                                    <button type="button" class="btn btn-primary">Submit</button>
-                                </div>
+                        <!-- Markdown Text Editor -->
+                        <div id="content">
+                            <h3>Search with Tags:</h3>
+                            <form>
+                                <label for="tagger"></label><input name="tags" id="tagger">
+                            </form>
+                            <div class="row justify-content-center">
+                                <button type="button" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
 
@@ -195,9 +194,8 @@
                     <div class="card-body">
                         <div>
                             <h3>Similar Questions:</h3>
-                            <p>.</p>
-                            <div class="row" style="margin-top: 10px">
-                            <div id="suggestions" style="width: 100%"></div>
+                            <div class="row justify-content-center" style="margin-top: 10px">
+                                <div id="suggestions" style="width: 100%"></div>
                             </div>
                         </div>
                     </div>
@@ -262,10 +260,16 @@
         integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"
         charset="utf-8"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript"
         charset="utf-8"></script>
+
+<script type='text/javascript' src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'></script>
+
 <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/tags.js' %}"></script>
+
 <script src="{% static 'js/dashboard.js' %}"></script>
 <script src="{% static 'js/selectSource.js' %}"></script>
 <script src="{% static 'js/answerQuestion.js' %}"></script>
@@ -281,12 +285,23 @@
             availableTags: sampleTags,
             allowDuplicates: false,
             placeholderText: null,   // Se  ts `placeholder` attr on input field.
-
-
         });
         $("#tagger").tagit("assignedTags")
 
     });
+
+</script>
+
+
+<script type="text/javascript">
+
+    {% if questionDict %}
+        let answerDict = "{{questionDict}}";
+    {% endif %}
+
+    let str = answerDict.split("&#x27;").join('"').split("&quot;").join("");
+    let resultDict = JSON.parse(str);
+    console.log(resultDict);
 
 </script>
 

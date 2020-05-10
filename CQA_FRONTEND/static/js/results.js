@@ -1,9 +1,7 @@
 let idDict = resultDict;
 
-let verifCount = 0;
 let sortedIDArr = [];
 
-let apiData = null;
 let scoreArr = [];
 
 function swap(json) {
@@ -31,7 +29,6 @@ async function getData() {
 
             let scoreDict = {};
             let sortedScoreDict = {};
-            apiData = data;
             // generate score array and score dict key = score, value = id
             for (let i = 0; i < data.items.length; i++) {
                 scoreArr.push(idDict[data.items[i].question_id]);
@@ -51,12 +48,6 @@ async function getData() {
 
             for (let i = 0; i < data.items.length; i++) {
                 sortedIDArr.push(sortedScoreDict[scoreArr[i]]);
-            }
-
-            for (let i = 0; i < data.items.length; i++) {
-                if (data.items[i].is_answered) {
-                    verifCount = verifCount + 1;
-                }
             }
 
             dataTable(data)
