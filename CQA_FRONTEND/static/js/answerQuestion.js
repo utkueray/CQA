@@ -24,8 +24,8 @@ if (accountID != null || accessToken != null) {
                 $("#suggestions").append(
                     $('<div>').append(
                         $('<div>').addClass('card shadow mb-4').append(
-                            $('<a>').addClass('h5 mb-0 mr-3 font-weight-bold btn card-title primary-color').text(title).attr('href', link).attr('target', '_blank'),
-                            $('<div>').attr('id', 'table' + question_id).css('margin','20px')
+                            $('<a>').addClass('h5 font-weight-bold btn underline card-title primary-color').text(title).attr('href', link).attr('target', '_blank').css("text-align","left").css("text-decoration", "underline"),
+                            $('<div>').attr('id', 'table' + question_id).css('margin', '20px')
                         ),
                     )
                 )
@@ -81,11 +81,12 @@ if (accountID != null || accessToken != null) {
                             $('#' + ids).append(
                                 $('<tr>').attr('href', link).attr('target', '_blank').append(
                                     $('<td>').addClass('m-0 font-weight-bold').text(score + "%"),
-                                    $('<td>').html(title),
+                                    $('<td>').append(
+                                        $('<a>').html(title).attr("href", link).attr("target", "_blank")
+                                    ),
                                     $('<td>').text(date)
-                                ))
-
-
+                                )
+                            )
                         }
 
                         $('#dt-filter-select' + ids).dataTable({
@@ -100,6 +101,10 @@ if (accountID != null || accessToken != null) {
                                         }
                                         return data;
                                     }
+                                },
+                                {
+                                    targets: [1],
+
                                 }
                             ],
                             initComplete: function () {

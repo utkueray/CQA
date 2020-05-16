@@ -31,17 +31,14 @@ def askQuestions(request):
 
 def answerQuestions(request):
     userData = (json.loads(request.COOKIES.get('userData')))
-    # accessToken, stackOverflowID, APIKEY
-    # print(userData["stackOverflowID"], userData["APIKEY"])
+
     response = requests.get("https://api.stackexchange.com/2.2/users/"
                             + str(userData["stackOverflowID"]) +
                             "/questions?order=desc&sort=activity&site=stackoverflow&filter=!9Z(-wwYGT&key=" +
                             str(userData["APIKEY"]))
-    # print(json.dumps(response.json()["items"], indent=4, sort_keys=True))
 
     questionDict = {}
     for item in response.json()["items"]:
-        # print(item["question_id"],item["tags"], item["title"], item["body"])
         title = item["title"]
         question = item["body"]
         tags = item["tags"]

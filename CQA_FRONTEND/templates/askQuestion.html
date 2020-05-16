@@ -7,7 +7,7 @@
 
     <!-- Custom fonts for this template-->
     {% load static %}
-        <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet" type="text/css">
 
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
@@ -121,7 +121,7 @@
 
 
             <!-- Begin Page Content -->
-            <div class="container-fluid"  style="width: 1000px">
+            <div class="container-fluid" style="width: 1000px">
                 <!-- Markdown Text Editor -->
                 <div class="row h-100 justify-content-center">
                     <div style="width: 1000px">
@@ -154,12 +154,12 @@
                             </div>
                         </div>
                         <div class="row justify-content-center">
-                        <button type="button" onclick="return writeDB()" class="btn btn-primary align-content-center">
-                            Submit
-                        </button>
-                            </div>
+                            <button type="button" onclick="return writeDB()"
+                                    class="btn btn-primary align-content-center">
+                                Submit
+                            </button>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -228,15 +228,14 @@
 <script>
     var textarea = document.getElementById("editor");
 
-    textarea.addEventListener("paste", function() {
+    textarea.addEventListener("paste", function () {
 
-    if (this.value !== "")
-    {
-        console.log(this.value)
-        this.value = this.value + "\n";
-    }
+        if (this.value !== "") {
+            console.log(this.value)
+            this.value = this.value + "\n";
+        }
 
-}, false);
+    }, false);
 </script>
 
 </body>

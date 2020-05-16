@@ -83,8 +83,9 @@ function dataTable(data) {
                 $('<tr>').attr('href', link).attr('target', '_blank').append(
                     $('<td>').addClass('m-0 font-weight-bold text-success').text("Verified Answer"),
                     $('<td>').addClass('m-0 font-weight-bold text-success').text(score + "%"),
-                    $('<td>').html(title),
-                    $('<td>').text(date)
+                    $('<td>').append(
+                        $('<a>').html(title).attr("href", link).attr("target", "_blank")
+                    ), $('<td>').text(date)
                 ))
         } else if (answer_count > 0) {
 
@@ -92,8 +93,9 @@ function dataTable(data) {
                 $('<tr>').attr('href', link).attr('target', '_blank').append(
                     $('<td>').addClass('m-0 font-weight-bold text-warning').text("Unverified Answers"),
                     $('<td>').addClass('m-0 font-weight-bold text-warning').text(score + "%"),
-                    $('<td>').html(title),
-                    $('<td>').text(date)
+                    $('<td>').append(
+                        $('<a>').html(title).attr("href", link).attr("target", "_blank")
+                    ), $('<td>').text(date)
                 ))
 
         } else {
@@ -102,7 +104,9 @@ function dataTable(data) {
                 $('<tr>').attr('href', link).attr('target', '_blank').append(
                     $('<td>').addClass('m-0 font-weight-bold text-danger').text("Not Answered"),
                     $('<td>').addClass('m-0 font-weight-bold text-danger').text(score + "%"),
-                    $('<td>').html(title),
+                    $('<td>').append(
+                        $('<a>').html(title).attr("href", link).attr("target", "_blank")
+                    ),
                     $('<td>').text(date)
                 ))
         }

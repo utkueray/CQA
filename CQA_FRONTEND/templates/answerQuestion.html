@@ -7,19 +7,18 @@
 
     <!-- Custom fonts for this template-->
     {% load static %}
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <!-- Custom styles for this template-->
-    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
           href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
-    <link rel='stylesheet' href='https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css'>
 
-
-    <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+    <link rel='stylesheet' href='https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css'>
 
 </head>
 
@@ -115,7 +114,9 @@
                 <div class="card shadow ">
                     <div class="card-body">
                         <div>
-                            <h3>Suggestions:</h3>
+                            <div class="row justify-content-center">
+                                <h3>Suggestions:</h3>
+                            </div>
                             <div class="row">
                                 <div id="" style="width: 100%"></div>
                             </div>
@@ -129,7 +130,9 @@
                     <div class="card-body">
                         <!-- Markdown Text Editor -->
                         <div id="content">
-                            <h3>Search with Tags:</h3>
+                            <div class="row justify-content-center">
+                                <h3>Search with Tags:</h3>
+                            </div>
                             <form>
                                 <label for="tagger"></label><input name="tags" id="tagger">
                             </form>
@@ -146,8 +149,11 @@
                 <div class="card shadow ">
                     <div class="card-body">
                         <div>
-                            <h3>Similar Questions:</h3>
-                            <div class="row justify-content-center" style="margin-top: 10px">
+                            <div class="row justify-content-center">
+                                <h3>Similar Questions:</h3>
+
+                            </div>
+                            <div style="margin-top: 10px">
                                 <div id="suggestions" style="width: 100%"></div>
                             </div>
                         </div>
@@ -204,27 +210,23 @@
 </body>
 
 
-<!-- Bootstrap core JavaScript-->
-<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 <!-- Custom scripts for all pages-->
-<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
-<script src="https://code.jquery.com/jquery-3.5.0.min.js"
-        integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-<script src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src='https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js'></script>
 
+<!-- Custom scripts for all pages-->
 <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/tags.js' %}"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
-<script src="{% static 'js/selectSource.js' %}"></script>
+
 <script src="{% static 'js/answerQuestion.js' %}"></script>
+
 <script>
     $(function () {
         // singleFieldTags2 is an INPUT element, rather than a UL as in the other
@@ -238,7 +240,7 @@
 
     });
 
-    $("#tagSubmit").click(function(){
+    $("#tagSubmit").click(function () {
 
         qTitle = $("#tagger").tagit("assignedTags").join(' ')
         qText = $("#tagger").tagit("assignedTags").join(' ')
@@ -262,7 +264,6 @@
     console.log(resultDict);
 
 </script>
-
 
 
 </html>
