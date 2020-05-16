@@ -110,20 +110,6 @@
 
             <!-- Begin Page Content -->
 
-            <div class=" justify-content-center" style="margin-top: 50px">
-                <div class="card shadow ">
-                    <div class="card-body">
-                        <div>
-                            <div class="row justify-content-center">
-                                <h3>Suggestions:</h3>
-                            </div>
-                            <div class="row">
-                                <div id="" style="width: 100%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="justify-content-center" style="margin-top: 50px">
                 <div class="card shadow ">
@@ -161,6 +147,20 @@
                 </div>
             </div>
 
+            <div class=" justify-content-center" style="margin-top: 50px">
+                <div class="card shadow ">
+                    <div class="card-body">
+                        <div>
+                            <div class="row justify-content-center">
+                                <h3>Suggestions:</h3>
+                            </div>
+                            <div class="row">
+                                <div id="" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -212,6 +212,12 @@
 
 
 <!-- Custom scripts for all pages-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
@@ -219,7 +225,6 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src='https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js'></script>
-
 <!-- Custom scripts for all pages-->
 <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/tags.js' %}"></script>
