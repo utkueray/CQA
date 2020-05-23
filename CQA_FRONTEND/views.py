@@ -33,8 +33,12 @@ def answerQuestions(request):
     userData = (json.loads(request.COOKIES.get('userData')))
 
     response = requests.get("https://api.stackexchange.com/2.2/users/"
-                            + str(userData["stackOverflowID"]) +
-                            "/questions?order=desc&sort=activity&site=stackoverflow&filter=!9Z(-wwYGT&key=" +
+                            + str(userData["selectedSiteID"]) +
+                            "/questions?order=desc&sort=activity&site="+str(userData["selectedSiteParam"])+"&filter=!9Z(-wwYGT&key=" +
+                            str(userData["APIKEY"]))
+    print("https://api.stackexchange.com/2.2/users/"
+                            + str(userData["selectedSiteID"]) +
+                            "/questions?order=desc&sort=activity&site="+str(userData["selectedSiteParam"])+"&filter=!9Z(-wwYGT&key=" +
                             str(userData["APIKEY"]))
 
     questionDict = {}

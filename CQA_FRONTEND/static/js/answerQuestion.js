@@ -1,50 +1,49 @@
-let stackOverflowIDAQ = "";
 let idDict;
 
-if (accountID != null || accessToken != null) {
+userDataSaved = userData
+//data is the JSON string
+cookieUserData = JSON.parse(getCookie('userData'))
+console.log(cookieUserData.selectedSiteID)
+$.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSiteID + "/questions?order=desc&sort=activity&site=" + cookieUserData.selectedSiteParam + "&key=" + APIKEY, function (data_question) {
+    for (let i = 0; i < data_question.items.length; i++) {
+        let title = data_question.items[i].title;
+        let d = document.createElement('div');
+        d.innerHTML = data_question.items[i].title;
+        title = d.innerText;
+        let link = data_question.items[i].link;
+        let question_id = data_question.items[i].question_id;
+        $("#suggestions").append(
+            $('<div>').append(
+                $('<div>').addClass('card shadow mb-4').append(
+                    $('<a>').addClass('h5 font-weight-bold btn underline card-title primary-color').text(title).attr('href', link).attr('target', '_blank').css("text-align", "left").css("text-decoration", "underline"),
+                    $('<div>').attr('id', 'table' + question_id).css('margin', '20px')
+                ),
+            )
+        )
+    }
+    if (typeof resultDict !== 'undefined') {
 
-    $.getJSON("https://api.stackexchange.com/2.2/users/" + accountID + "/associated?filter=!*K3Z9x9w-2fKbidf&key=" + APIKEY, function (data_account) {
-        //data is the JSON string
-        let items = data_account.items;
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].site_name === "Stack Overflow") {
-                stackOverflowIDAQ = items[i].user_id;
-                userData.stackOverflowIDAQ = items[i].user_id;
-            }
-        }
+        for (let ids in resultDict) {
+            console.log(ids);
 
-        $.getJSON("https://api.stackexchange.com/2.2/users/" + stackOverflowIDAQ + "/questions?order=desc&sort=activity&site=stackoverflow&key=" + APIKEY, function (data_question) {
-            for (let i = 0; i < data_question.items.length; i++) {
-                let title = data_question.items[i].title;
-                let d = document.createElement('div');
-                d.innerHTML = data_question.items[i].title;
-                title = d.innerText;
-                let link = data_question.items[i].link;
-                let question_id = data_question.items[i].question_id;
-                $("#suggestions").append(
-                    $('<div>').append(
-                        $('<div>').addClass('card shadow mb-4').append(
-                            $('<a>').addClass('h5 font-weight-bold btn underline card-title primary-color').text(title).attr('href', link).attr('target', '_blank').css("text-align","left").css("text-decoration", "underline"),
-                            $('<div>').attr('id', 'table' + question_id).css('margin', '20px')
-                        ),
-                    )
-                )
-            }
-            for (let ids in resultDict) {
-                console.log(ids);
+            if (resultDict[ids] != null) {
 
-                if (resultDict[ids] != null) {
+                let queryS = "https://api.stackexchange.com/2.2/questions/";
+                let queryE = "?order=desc&sort=activity&site=" + cookieUserData.selectedSiteParam + "&key=" + APIKEY;
+                for (let key in resultDict[ids]) {
+                    queryS = queryS + key + ';';
+                }
+                // generate a query string
+                queryS = queryS.slice(0, -1) + queryE;
+                // GET query results as data obj
+                console.log(queryS)
+                $.getJSON(queryS, function (data) {
+                    if (data.items.length === 0) {
+                        console.log("There is no data to show.")
+                        $("#similar-questions").remove();
+                        $("#suggestion-questions").remove();
 
-                    let queryS = "https://api.stackexchange.com/2.2/questions/";
-                    let queryE = "?order=desc&sort=activity&site=ai&key=" + APIKEY;
-                    for (let key in resultDict[ids]) {
-                        queryS = queryS + key + ';';
-                    }
-                    // generate a query string
-                    queryS = queryS.slice(0, -1) + queryE;
-                    // GET query results as data obj
-                    $.getJSON(queryS, function (data) {
-
+                    } else {
                         $("#table" + ids).append(
                             $('<table>').addClass("table").attr('id', 'dt-filter-select' + ids).append(
                                 $('<thead>').append(
@@ -76,7 +75,7 @@ if (accountID != null || accessToken != null) {
                             date = new Date(data.items[j].creation_date * 1000).toLocaleDateString("en-GB");
                             accepted_answer_id = data.items[j].accepted_answer_id;
                             answer_count = data.items[j].answer_count;
-                            console.log("#tbody-results" + ids)
+                            console.log(title)
 
                             $('#' + ids).append(
                                 $('<tr>').attr('href', link).attr('target', '_blank').append(
@@ -130,15 +129,23 @@ if (accountID != null || accessToken != null) {
                             },
                         });
 
+                    }
+                });
 
-                    });
-                }
             }
-        });
-    });
+        }
+    } else {
+        console.log("User has no question.")
+    }
+});
 
-} else {
-
-    alert("Please login with StackExchange account.")
-    window.location = "/"
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
 }

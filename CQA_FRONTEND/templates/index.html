@@ -3,214 +3,221 @@
 
 <head>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>CQA ML</title>
-  <!-- Font Awesome Icons -->
-  {% load static %}
+    <title>CQA ML</title>
+    <!-- Font Awesome Icons -->
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}"/>
 
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script> <!-- jquery should always load before any other scripts -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <!-- jquery should always load before any other scripts -->
 
-  <link href="{% static 'vendor/fontawesome-free/css/all.min.css'%}" rel="stylesheet" type="text/css">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet">
-  <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic'
+          rel='stylesheet' type='text/css'>
 
-  <!-- Plugin CSS -->
-  <link href="{% static 'vendor/magnific-popup/magnific-popup.css' %}" rel="stylesheet">
+    <!-- Plugin CSS -->
+    <link href="{% static 'vendor/magnific-popup/magnific-popup.css' %}" rel="stylesheet">
 
-  <!-- Theme CSS - Includes Bootstrap -->
-  <link href="{% static 'css/creative.min.css'%}" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
+    <!-- Theme CSS - Includes Bootstrap -->
+    <link href="{% static 'css/creative.min.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
 
 </head>
 
 <body id="page-top">
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
     <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="#page-top">CQA ML</a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto my-2 my-lg-0">
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#services">Services</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
-          </li>
-        </ul>
-      </div>
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">CQA ML</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto my-2 my-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#services">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </nav>
+</nav>
 
-  <!-- Masthead -->
-  <header class="masthead">
+<!-- Masthead -->
+<header class="masthead">
     <div class="container h-100">
-      <div class="row h-100 align-items-center justify-content-center text-center">
-        <div class="col-lg-10 align-self-end">
-          <h1 class="text-uppercase text-white font-weight-bold">Test Your Questions Beforehand...</h1>
+        <div class="row h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-10 align-self-end">
+                <h1 class="text-uppercase text-white font-weight-bold">Test Your Questions Beforehand...</h1>
+            </div>
+            <div class="col-lg-8 align-self-baseline">
+                <p class="text-white-75 font-weight-light mb-5">
+                    Our mission is to help you improve your questions with machine learning before and after you upload
+                    to any community
+                    question answering sites.
+                </p>
+                <h2 class="text-white mt-0">Start Using It Now !</h2>
+                <!--<a class="btn btn-dark btn-xl js-scroll-trigger" style="margin-top: 25px" id = "login-button" href="askQuestion.html">Get Started!</a>-->
+                <button id="login-button" class="btn btn-primary align-content-center">Login with Stack Exchange
+                </button>
+            </div>
         </div>
-        <div class="col-lg-8 align-self-baseline">
-          <p class="text-white-75 font-weight-light mb-5">
-            Our mission is to help you improve your questions with machine learning before and after you upload to any community
-            question answering sites.
-          </p>
-          <h2 class="text-white mt-0">Start Using It Now !</h2>
-          <!--<a class="btn btn-dark btn-xl js-scroll-trigger" style="margin-top: 25px" id = "login-button" href="askQuestion.html">Get Started!</a>-->
-          <button id ="login-button" class="btn btn-primary align-content-center">Login with Stack Exchange</button>
-        </div>
-      </div>
     </div>
-  </header>
+</header>
 
-  <!-- Services Section -->
-  <section class="page-section" id="services">
+<!-- Services Section -->
+<section class="page-section" id="services">
     <div class="container">
-      <h2 class="text-center mt-0">Services We Use</h2>
-      <div class="row">
-        <div class="col-lg-3 col-md-6 text-center">
-          <div class="mt-5">
-            <img src="{% static 'img/pythonLogo.png' %}" style="width:120px;height:120px; margin-bottom: 20px">
-            <h3 class="h4 mb-2">Python 3</h3>
-            <!--<p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>-->
-          </div>
+        <h2 class="text-center mt-0">Services We Use</h2>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mt-5">
+                    <img src="{% static 'img/pythonLogo.png' %}" style="width:120px;height:120px; margin-bottom: 20px">
+                    <h3 class="h4 mb-2">Python 3</h3>
+                    <!--<p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>-->
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mt-5">
+                    <img src="{% static 'img/jsLogo.png' %}" style="width:120px;height:120px; margin-bottom: 20px">
+                    <h3 class="h4 mb-2">JavaScript</h3>
+                    <!--<p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>-->
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mt-5">
+                    <img src="{% static 'img/python_nltkLogo.png' %}"
+                         style="width:120px;height:120px; margin-bottom: 20px">
+                    <h3 class="h4 mb-2">NLTK</h3>
+                    <!--<p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>-->
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mt-5">
+                    <img src="{% static 'img/colabLogo.png' %}" style="width:120px;height:120px; margin-bottom: 20px">
+                    <h3 class="h4 mb-2">Google Colab</h3>
+                    <!--<p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>-->
+                </div>
+            </div>
         </div>
-        <div class="col-lg-3 col-md-6 text-center">
-          <div class="mt-5">
-            <img src="{% static 'img/jsLogo.png' %}" style="width:120px;height:120px; margin-bottom: 20px">
-            <h3 class="h4 mb-2">JavaScript</h3>
-            <!--<p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>-->
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 text-center">
-          <div class="mt-5">
-            <img src="{% static 'img/python_nltkLogo.png' %}" style="width:120px;height:120px; margin-bottom: 20px">
-            <h3 class="h4 mb-2">NLTK</h3>
-            <!--<p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>-->
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 text-center">
-          <div class="mt-5">
-            <img src="{% static 'img/colabLogo.png' %}" style="width:120px;height:120px; margin-bottom: 20px">
-            <h3 class="h4 mb-2">Google Colab</h3>
-            <!--<p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>-->
-          </div>
-        </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- Contact Section -->
-  <section class="page-section bg-dark text-white" id="contact">
+<!-- Contact Section -->
+<section class="page-section bg-dark text-white" id="contact">
     <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 text-center">
-          <h2 class="mt-0">Contact Us</h2>
-          <p class=" mb-5 ">If you need anymore information about this project, you can reach contact us via mail.</p>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mt-0">Contact Us</h2>
+                <p class=" mb-5 ">If you need anymore information about this project, you can reach contact us via
+                    mail.</p>
+            </div>
         </div>
-      </div>
-      <div class="row text-white justify-content-center" >
-        <div class="col-lg-4 text-center ">
-          <a class="d-block" href="mailto:reyyan@sabanciuniv.edu">Reyyan Yeniterzi (Supervisor)</a>
+        <div class="row text-white justify-content-center">
+            <div class="col-lg-4 text-center ">
+                <a class="d-block" href="mailto:reyyan@sabanciuniv.edu">Reyyan Yeniterzi (Supervisor)</a>
+            </div>
         </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-lg-4 text-center" style="margin: 20px">
-          <a class="d-block" href="mailto:ueray@sabanciuniv.edu">Mehmet Utku Eray</a>
+        <div class="row justify-content-center">
+            <div class="col-lg-4 text-center" style="margin: 20px">
+                <a class="d-block" href="mailto:ueray@sabanciuniv.edu">Mehmet Utku Eray</a>
+            </div>
+            <div class="col-lg-4 text-center" style="margin: 20px">
+                <a class="d-block" href="mailto:dbozkurt@sabanciuniv.edu">Deniz Bozkurt</a>
+            </div>
+            <div class="col-lg-4 text-center" style="margin: 20px">
+                <a class="d-block" href="mailto:zeynepseda@sabanciuniv.edu">Zeynep Seda Birinci</a>
+            </div>
+            <div class="col-lg-4 text-center" style="margin: 20px">
+                <a class="d-block" href="mailto:selenozcan@yourwebsite.com">Selen Özcan</a>
+            </div>
         </div>
-        <div class="col-lg-4 text-center" style="margin: 20px">
-          <a class="d-block" href="mailto:dbozkurt@sabanciuniv.edu">Deniz Bozkurt</a>
-        </div>
-        <div class="col-lg-4 text-center" style="margin: 20px">
-          <a class="d-block" href="mailto:zeynepseda@sabanciuniv.edu">Zeynep Seda Birinci</a>
-        </div>
-        <div class="col-lg-4 text-center" style="margin: 20px">
-          <a class="d-block" href="mailto:selenozcan@yourwebsite.com">Selen Özcan</a>
-        </div>
-      </div>
     </div>
     <div class="container" style="margin-top: 50px; margin-bottom: -75px">
-      <div class="small text-center text-white">Copyright &copy; 2019 - Sabanci University</div>
+        <div class="small text-center text-white">Copyright &copy; 2019 - Sabanci University</div>
     </div>
-  </section>
+</section>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- Bootstrap core JavaScript -->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-  <!-- Plugin JavaScript -->
-  <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-  <script src="{% static 'vendor/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
+<!-- Plugin JavaScript -->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'vendor/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
 
-  <!-- Custom scripts for this template -->
-  <script src="{% static 'js/creative.min.js' %}"></script>
-  <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-auth.js"></script>
-  <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
-  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+<!-- Custom scripts for this template -->
+<script src="{% static 'js/creative.min.js' %}"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-auth.js"></script>
+<script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css"/>
 </body>
 
 
 <script type='text/javascript'>
-  // For simplicity, we're using jQuery for some things
-  //   However, the library has no jQuery dependency
+    // For simplicity, we're using jQuery for some things
+    //   However, the library has no jQuery dependency
 
-  $(function(){
+    $(function () {
 // Initialize library
-    SE.init({
-      // Parameters obtained by registering an app, these are specific to the SE
-      //   documentation site
-      clientId: 16684,
-      key: 'unCQQDAhgl)qZ4GZRXVVGQ((',
-      // Used for cross domain communication, it will be validated
-      channelUrl: 'http://127.0.0.1:8000/home/blank.htm',
-      // Called when all initialization is finished
-      complete: function(data) {
-        $('#login-button')
-                .removeAttr('disabled')
-                .text('Login with Stack Exchange');
-        console.log('data :', data)
-      }
-    });
+        SE.init({
+            // Parameters obtained by registering an app, these are specific to the SE
+            //   documentation site
+            clientId: 16684,
+            key: 'unCQQDAhgl)qZ4GZRXVVGQ((',
+            // Used for cross domain communication, it will be validated
+            channelUrl: 'http://127.0.0.1:8000/home/blank.htm',
+            // Called when all initialization is finished
+            complete: function (data) {
+                $('#login-button')
+                    .removeAttr('disabled')
+                    .text('Login with Stack Exchange');
+                console.log('data :', data)
+            }
+        });
 
-    let accountID = "";
-    let accessToken = "";
+        let accountID = "";
+        let accessToken = "";
 // Attach click handler to login button
-    $('#login-button').click(function() {
-      // Make the authentication call, note that being in an onclick handler
-      //   is important; most browsers will hide windows opened without a
-      //   'click blessing'
+        $('#login-button').click(function () {
+            // Make the authentication call, note that being in an onclick handler
+            //   is important; most browsers will hide windows opened without a
+            //   'click blessing'
 
-      SE.authenticate({
-        success: function(data) {
-            console.log("success");
-            console.log( data.networkUsers[0].account_id + ', got access token = ' + data.accessToken)
-            accountID = data.networkUsers[0].account_id;
-            accessToken = data.accessToken;
-            localStorage.setItem("accountID",data.networkUsers[0].account_id);
-            localStorage.setItem("accessToken",data.accessToken);
-            console.log(accountID, accessToken);
+            SE.authenticate({
+                success: function (data) {
+                    accountID = data.networkUsers[0].account_id;
+                    accessToken = data.accessToken;
+                    localStorage.setItem("accountID", data.networkUsers[0].account_id);
+                    localStorage.setItem("accessToken", data.accessToken);
+                    console.log(accountID, accessToken);
 
-            window.location = "{% url 'dashboard' %}"
-        },
-        error: function(data) {
-          console.log('An error occurred:\n' + data.errorName + '\n' + data.errorMessage);
-        },
-        networkUsers: true
-      });
+                    window.location = "{% url 'dashboard' %}"
+                },
+                error: function (data) {
+                    console.log('An error occurred:\n' + data.errorName + '\n' + data.errorMessage);
+                },
+                networkUsers: true
+            });
 
+        });
     });
-  });
 </script>
 
 </html>

@@ -6,7 +6,7 @@
     <title>Dashboard</title>
 
     {% load static %}
-
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
     <!-- Custom fonts for this template-->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -113,7 +113,7 @@
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Account
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Account
                                         </div>
                                         <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
                                              id="accountType">Registered
@@ -133,7 +133,7 @@
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                             Reputation
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800" id="userRep">0</div>
@@ -146,13 +146,14 @@
                         </div>
                     </div>
 
+
                     <!-- Asked Questions Card -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Asked
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Asked
                                             Questions
                                         </div>
                                         <div class="row no-gutters align-items-center">
@@ -177,7 +178,7 @@
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Answered
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Answered
                                             Questions
                                         </div>
                                         <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
@@ -194,16 +195,9 @@
                 </div>
 
                 <!-- User Questions -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Asked Questions</h1>
-                </div>
+                <div id="content-user-questions">
+                    </div>
 
-                <div id="questionsWrapper"></div>
-
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Answered Questions</h1>
-                </div>
-                <div id="answersWrapper"></div>
 
             </div>
             <!-- /.container-fluid -->
@@ -262,7 +256,10 @@
 <!-- Custom scripts for all pages-->
 <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
+<script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
 <script src="{% static 'js/tags.js' %}"></script>
+<script src="{% static 'data/sites.js' %}"></script>
+<script src="{% static 'js/global.js' %}"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
 
 </body>
