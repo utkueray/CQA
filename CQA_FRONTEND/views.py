@@ -42,7 +42,7 @@ def answerQuestions(request):
                             str(userData["APIKEY"]))
 
     questionDict = {}
-    for item in response.json()["items"]:
+    for item in response.json()["items"][:5]:
         title = item["title"]
         question = item["body"]
         tags = item["tags"]

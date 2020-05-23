@@ -1,6 +1,7 @@
 // user accessToken, and Stack Exchange ID
 let accessToken = localStorage.getItem("accessToken");
 let accountID = localStorage.getItem("accountID");
+accountID = "4148701"
 let selectedSiteID = ""
 
 // APIKEY registered to this app by Stack Exchange
@@ -31,7 +32,7 @@ function capitalizeFirstLetter(string) {
 }
 
 // find the parameter for the appropriate site such as Stack Overflow -> stackoverflow
-userData.selectedSite = "https://stackoverflow.com"
+userData.selectedSite = "https://ai.stackexchange.com"
 
 for (let i = 0; i < sitesData.length; i++) {
 
@@ -46,7 +47,7 @@ for (let i = 0; i < sitesData.length; i++) {
 
 if (accountID != null || accessToken != null) {
 
-    $.getJSON("https://api.stackexchange.com/2.2/users/" + accountID + "/associated?filter=!*K3Z9x9w-2fKbidf&key=" + APIKEY, function (data_account) {
+    $.getJSON("https://api.stackexchange.com/2.2/users/" + accountID + "/associated?pagesize=50&filter=!*K3Z9x9w-2fKbidf&key=" + APIKEY, function (data_account) {
         //data is the JSON string
         let items = data_account.items;
         for (let i = 0; i < items.length; i++) {
