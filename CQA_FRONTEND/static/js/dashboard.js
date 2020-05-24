@@ -1,11 +1,47 @@
+if (getCookie("option1")) {
+    $("#selector :input")[0].checked = true;
+    $("#selector :input")[1].checked = false;
+
+    $('#option1Label').addClass("active")
+    $('#option2Label').removeClass("active")
+
+} else {
+    $("#selector :input")[0].checked = false;
+    $("#selector :input")[1].checked = true;
+    $('#option1Label').removeClass("active")
+    $('#option2Label').addClass("active")
+}
+
 // user accessToken, and Stack Exchange ID
 let accessToken = localStorage.getItem("accessToken");
-let accountID = localStorage.getItem("accountID");
-accountID = "4148701"
 let selectedSiteID = ""
-
+let accountID = ""
 // APIKEY registered to this app by Stack Exchange
 let APIKEY = "unCQQDAhgl)qZ4GZRXVVGQ((";
+
+
+if ($("#selector :input")[0].checked) {
+    console.log("Test Mode Activated");
+    accountID = "4148701"
+} else {
+    console.log("Test Mode Deactivated");
+    accountID = localStorage.getItem("accountID");
+}
+
+$("#selector :input").change(function () {
+    if (this.id === "option1") {
+        console.log("Test Mode Activated");
+        accountID = "4148701"
+        setCookie("option1", true, 99)
+
+    } else {
+        console.log("Test Mode Deactivated");
+        accountID = localStorage.getItem("accountID");
+        setCookie("option1", false, 99)
+    }
+    location.reload();
+
+});
 
 // user data that will be used for both api calls and for parameters for machine learning models
 let userData = {
@@ -194,3 +230,5 @@ function getCookie(name) {
 function eraseCookie(name) {
     document.cookie = name + '=; Max-Age=-99999999;';
 }
+
+

@@ -59,7 +59,23 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
+        <div style="margin-bottom :20px">
+            <div class="row justify-content-center">
+                <span class="h5 text-white">Test Mode</span>
+            </div>
+            <div class="row justify-content-center">
+                <div class="btn-group btn-group-toggle" id="selector" data-toggle="buttons">
+                    <label id="option1Label" class="btn btn-secondary ">
+                        <input type="radio" name="options" id="option1" autocomplete="off"> On
+                    </label>
+                    <label id="option2Label" class="btn btn-secondary">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Off
+                    </label>
+                </div>
+            </div>
 
+        </div>
+        <hr class="sidebar-divider d-none d-md-block">
     </ul>
     <!-- End of Sidebar -->
 
@@ -236,7 +252,22 @@
 
     {% if questionDict %}
         let html = '\n' +
-            '            <div id= "similar-questions" class=" justify-content-center" style="margin-top: 50px">\n' +
+            '            <div id= "suggestion-questions" class=" justify-content-center" style="margin-top: 50px">\n' +
+            '                <div class="card shadow ">\n' +
+            '                    <div class="card-body">\n' +
+            '                        <div>\n' +
+            '                            <div class="row justify-content-center">\n' +
+            '                                <h3>Suggestions:</h3>\n' +
+            '                            </div>\n' +
+            '                            <div class="row">\n' +
+            '                                <div id="suggestions-oneforall" style="width: 100%"></div>\n' +
+            '                            </div>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '            </div>'
+            +
+            '\n'+'<div id= "similar-questions" class=" justify-content-center" style="margin-top: 50px">\n' +
             '                <div class="card shadow ">\n' +
             '                    <div class="card-body">\n' +
             '                        <div>\n' +
@@ -250,22 +281,7 @@
             '                        </div>\n' +
             '                    </div>\n' +
             '                </div>\n' +
-            '            </div>\n' +
-            '\n' +
-            '            <div id= "suggestion-questions" class=" justify-content-center" style="margin-top: 50px">\n' +
-            '                <div class="card shadow ">\n' +
-            '                    <div class="card-body">\n' +
-            '                        <div>\n' +
-            '                            <div class="row justify-content-center">\n' +
-            '                                <h3>Suggestions:</h3>\n' +
-            '                            </div>\n' +
-            '                            <div class="row">\n' +
-            '                                <div id="" style="width: 100%"></div>\n' +
-            '                            </div>\n' +
-            '                        </div>\n' +
-            '                    </div>\n' +
-            '                </div>\n' +
-            '            </div>'
+            '            </div>\n'
 
         $('#content-datas').append(html);
 
@@ -275,6 +291,14 @@
 
         let resultDict = JSON.parse(str);
         console.log(resultDict);
+    {% endif %}
+
+    {% if suggestionDict %}
+        let suggestionsDict = "{{suggestionDict}}";
+        let str2 = suggestionsDict.split("&#x27;").join('"').split("&quot;").join("");
+        let suggestions = JSON.parse(str2);
+
+        console.log(suggestions)
     {% endif %}
 
 </script>

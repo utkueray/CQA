@@ -34,21 +34,46 @@ def answerQuestions(request):
 
     response = requests.get("https://api.stackexchange.com/2.2/users/"
                             + str(userData["selectedSiteID"]) +
-                            "/questions?order=desc&sort=activity&site="+str(userData["selectedSiteParam"])+"&filter=!9Z(-wwYGT&key=" +
+                            "/questions?order=desc&sort=activity&site=" + str(
+        userData["selectedSiteParam"]) + "&filter=!9Z(-wwYGT&key=" +
                             str(userData["APIKEY"]))
     print("https://api.stackexchange.com/2.2/users/"
-                            + str(userData["selectedSiteID"]) +
-                            "/questions?order=desc&sort=activity&site="+str(userData["selectedSiteParam"])+"&filter=!9Z(-wwYGT&key=" +
-                            str(userData["APIKEY"]))
+          + str(userData["selectedSiteID"]) +
+          "/questions?order=desc&sort=activity&site=" + str(userData["selectedSiteParam"]) + "&filter=!9Z(-wwYGT&key=" +
+          str(userData["APIKEY"]))
+    model = gensim.models.doc2vec.Doc2Vec.load("CQA_FRONTEND/static/data/doc2vecmodel")
 
     questionDict = {}
+    suggestionDict = {}
+
+    suggestionTitle = ""
+    suggestionQuestion = ""
+    suggestionTags = []
+
+    for item in response.json()["items"][:20]:
+        suggestionTitle += item["title"]
+        suggestionQuestion += item["body"]
+        suggestionTags += item["tags"]
+
+    suggectionDoc = suggestionTitle + suggestionQuestion + ' '.join(map(str, suggestionTags))
+
+    test_corpus = list(read_corpus([suggectionDoc], tokens_only=True))
+    inferred_vector = model.infer_vector(test_corpus[0])
+    sims = model.docvecs.most_similar([inferred_vector], topn=5)
+
+    resultDict = {}
+
+    for (key, val) in sims:
+        resultDict[str(key)] = val
+
+    suggestionDict = resultDict
+
     for item in response.json()["items"][:5]:
         title = item["title"]
         question = item["body"]
         tags = item["tags"]
         doc = title + question + ' '.join(map(str, tags))
 
-        model = gensim.models.doc2vec.Doc2Vec.load("CQA_FRONTEND/static/data/doc2vecmodel")
         test_corpus = list(read_corpus([doc], tokens_only=True))
         inferred_vector = model.infer_vector(test_corpus[0])
         sims = model.docvecs.most_similar([inferred_vector], topn=5)
@@ -60,7 +85,8 @@ def answerQuestions(request):
 
         questionDict[str(item["question_id"])] = str(resultDict)
 
-    return render(request, 'answerQuestion.html', context={'questionDict':  questionDict})
+    return render(request, 'answerQuestion.html',
+                  context={'questionDict': questionDict, 'suggestionDict': suggestionDict})
 
 
 def results(request, derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
