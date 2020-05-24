@@ -1,6 +1,7 @@
 let qText = "";
 let qTitle = "";
 let tags = "";
+document.getElementById("modeSelect").style.display = "none";
 
 var simplemde = new SimpleMDE({
 
@@ -61,7 +62,6 @@ $('#tagger').tagit({
 
 function writeDB() {
 
-
     qTitle = document.getElementById('qTitle').value
     qText = simplemde.value();
 
@@ -69,9 +69,5 @@ function writeDB() {
 
     if (qTitle !== "" && qText !== "" && tags !== "") {
         window.location = "/results/" + userData.derived_userReputation + "/" + userData.derived_userViews + "/" + userData.derived_userUpVotes + "/" + userData.derived_userDownVotes + "/" + userData.derived_userCreationDate + "/" + userData.derived_userLastAccessDate + "/" + qTitle.split(' ').join('_').replace(/[?=]/g, "") + "/" + qText.split(' ').join('_').replace(/[?=]/g, "") + "/" + tags.split(' ').join('_') + "/"
-    } else if (qTitle !== "" && qText !== "") {
-        window.location = "/results/" + userData.derived_userReputation + "/" + userData.derived_userViews + "/" + userData.derived_userUpVotes + "/" + userData.derived_userDownVotes + "/" + userData.derived_userCreationDate + "/" + userData.derived_userLastAccessDate + "/" + qTitle.split(' ').join('_').replace(/[?=]/g, "") + "/" + qText.split(' ').join('_').replace(/[?=]/g, "") + "/"
-    } else if (qTitle !== "") {
-        window.location = "/results/" + userData.derived_userReputation + "/" + userData.derived_userViews + "/" + userData.derived_userUpVotes + "/" + userData.derived_userDownVotes + "/" + userData.derived_userCreationDate + "/" + userData.derived_userLastAccessDate + "/" + qTitle.split(' ').join('_').replace(/[?=]/g, "") + "/"
     }
 }

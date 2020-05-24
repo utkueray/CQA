@@ -89,11 +89,11 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
- <div style="margin-bottom :20px">
+         <div id="modeSelect" >
             <div class="row justify-content-center">
                 <span class="h5 text-white">Test Mode</span>
             </div>
-            <div class="row justify-content-center">
+            <div class="row justify-content-center" style="margin-bottom :20px">
                 <div class="btn-group btn-group-toggle" id="selector" data-toggle="buttons">
                     <label id="option1Label" class="btn btn-secondary ">
                         <input type="radio" name="options" id="option1" autocomplete="off"> On
@@ -103,9 +103,9 @@
                     </label>
                 </div>
             </div>
+        <hr class="sidebar-divider d-none d-md-block">
 
         </div>
-        <hr class="sidebar-divider d-none d-md-block">
 
     </ul>
     <!-- End of Sidebar -->
@@ -227,9 +227,11 @@
 <script type="text/javascript">
 
     {% if resultDict %}
-        var resultDict = {{resultDict}};
-        var answerPercentage = {{answerPercentage}};
-        document.getElementById("probability").innerText = "Your question will get an answer with the probability of " + (100 * answerPercentage).toFixed(2) + "%."
+        let resultDict = {{resultDict}};
+        let answerPercentage = {{answerPercentage}};
+        let time = "{{ time }}";
+        document.getElementById("probability").innerText = "Your question may get an answer with the probability of " + (100 * answerPercentage).toFixed(2) + "% within " + time + ".";
+
     {% endif %}
 
 </script>

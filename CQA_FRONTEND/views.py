@@ -4,6 +4,12 @@ import gensim, json
 from sklearn.ensemble import RandomForestClassifier
 from datetime import datetime
 import requests
+from imblearn.over_sampling import SMOTE, ADASYN
+from sklearn import metrics
+from sklearn.metrics import f1_score
+from sklearn.ensemble import RandomForestClassifier
+import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer
 
 # user date pulled from stackexchange API
 now = datetime.now()
@@ -113,7 +119,12 @@ def results(request, derived_userReputation, derived_userViews, derived_userUpVo
     answerPercentage = \
         willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
                       derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)[1]
-    return render(request, 'results.html', context={'resultDict': resultDict, 'answerPercentage': answerPercentage})
+
+    time = timePer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
+                             derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)
+
+    return render(request, 'results.html', context={'resultDict': resultDict, 'answerPercentage': answerPercentage,
+                                                    'time': time})
 
 
 def read_corpus(fname, tokens_only=False):
@@ -249,3 +260,123 @@ def willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes
     for i in range(len(final_test)):
         # print(" Predicted=%s" % (yNew[i]))
         return yNew[i]
+
+
+def get_part_of_day(x):
+    return (
+        "1" if 5 <= int(x.strftime('%H')) <= 10
+        else
+        "2" if 11 <= int(x.strftime('%H')) <= 16
+        else
+        "3" if 17 <= int(x.strftime('%H')) <= 22
+        else
+        "4"
+    )
+
+
+def timePer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
+            derived_userCreationDate, derived_userLastAccessDate, derived_title, derived_question, derived_tags):
+    # create a new data frame
+
+    df = pd.DataFrame(
+        {'Question': [derived_question], 'Title': [derived_title], 'Creation Date': [derived_creation_date],
+         'Tags': [derived_tags], 'Reputation': [derived_userReputation],
+         "User Creation Date": [derived_userCreationDate], "User Last Access Date": [derived_userLastAccessDate],
+         "Views": [derived_userViews], "UpVotes": [derived_userUpVotes], "DownVotes": [derived_userDownVotes]})
+
+    df['Creation Date'] = pd.to_datetime(df['Creation Date'])
+    df['User Creation Date'] = pd.to_datetime(df['User Creation Date'])
+    df['User Last Access Date'] = pd.to_datetime(df['User Last Access Date'])
+    df['DownVotes'] = df['DownVotes'].astype(int)
+    df['UpVotes'] = df['UpVotes'].astype(int)
+    df['Reputation'] = df['Reputation'].astype(int)
+    df['Views'] = df['Views'].astype(int)
+
+    search = "Wh"
+    # what when where why
+
+    # boolean series returned
+    df["isQuestionwh"] = df["Title"].str.startswith(search).astype(int)
+
+    df['isWeekend'] = pd.to_datetime(df['Creation Date']).dt.dayofweek
+
+    df["isWeekend"] = (df["isWeekend"] < 5).astype(int)
+
+    df["Creation Date"] = df["Creation Date"].apply(get_part_of_day)
+    df["User Creation Date"] = df["User Creation Date"].apply(get_part_of_day)
+    df["User Last Access Date"] = df["User Last Access Date"].apply(get_part_of_day)
+
+    df["CreationDate_1"], df["CreationDate_2"], df["CreationDate_3"] = zip(*df['Creation Date'].map(encoder))
+    df["UserCreationDate_1"], df["UserCreationDate_2"], df["UserCreationDate_3"] = zip(
+        *df['User Creation Date'].map(encoder))
+    df["UserLastAccessDate_1"], df["UserLastAccessDate_2"], df["UserLastAccessDate_3"] = zip(
+        *df['User Last Access Date'].map(encoder))
+
+    df['Tag Count'] = df['Tags'].str.count('<')
+    df['QuestionLength'] = df['Question'].str.len()
+    df['IsQuestion'] = np.where(df['Title'].str.strip().str[-1] == '?', '1', '0')
+
+    df['Tags'] = df['Tags'].str.replace('<', ' ')
+    df['Tags'] = df['Tags'].str.replace('>', ' ')
+    df['Tags'] = df['Tags'].str.replace('-', ' ')
+    df['Tags'] = df['Tags'].str.split(' ')
+
+    cvec = CountVectorizer()
+    new = pd.read_pickle("CQA_FRONTEND/static/data/new")
+    corpus = new['Tags'].tolist()
+    cvec.fit_transform(corpus)
+    tokens = cvec.get_feature_names()
+
+    alltags = pd.DataFrame(0, index=np.arange(1), columns=tokens)
+    for tag in df.iloc[0]['Tags']:
+        alltags[tag] = 1
+
+    q_tags_added = pd.concat([df, alltags], axis=1)
+
+    q_tags_added = q_tags_added.iloc[:, :-1]
+    q_tags_added['Content'] = q_tags_added[['Title', 'Question']].apply(lambda x: ' '.join(x), axis=1)
+
+    q_tags_added['Content'] = q_tags_added['Content'].str.lower().str.split()
+
+    q_vecList = []
+    for index, row in q_tags_added.iterrows():
+        train_corpus = list(read_corpus(row['Content']))
+        model = gensim.models.doc2vec.Doc2Vec(vector_size=100, min_count=1, epochs=30)
+        model.build_vocab(train_corpus)
+        model.train(train_corpus, total_examples=model.corpus_count, epochs=model.epochs)
+        vector = model.infer_vector([])
+        # print(vector)
+        q_vecList.append(vector)
+
+    q_col_list = ['content' + str(x) for x in range(0, 100)]
+    q_doc2vecdf = pd.DataFrame(q_vecList, columns=q_col_list)
+    final_test = pd.concat([q_tags_added, q_doc2vecdf], axis=1)
+    final_test = final_test.drop(axis=1, columns=["Question", "Title", "Creation Date", "Tags", "User Creation Date",
+                                                  "User Last Access Date"])
+    final_test = final_test.drop(axis=1, columns=["Content"])
+    final_test = final_test.reset_index()
+    #del final_test['index']
+    final_test = final_test.replace(-9223372036854775808, 0)
+    final_test.sort_index(axis=1, inplace=True)
+    shuffled = pd.read_pickle("CQA_FRONTEND/static/data/shuffled2")
+
+    xtrain = shuffled.drop(axis=1, columns=['diff_in_minutes'])
+    labels = shuffled['diff_in_minutes']
+
+    X_resampled, y_resampled = ADASYN().fit_resample(xtrain, labels)
+
+    rfm = RandomForestClassifier(bootstrap=True, n_estimators=100, min_samples_leaf=1,
+                                 random_state=50, max_depth=50, min_samples_split=20, class_weight="balanced")
+
+    rfm.fit(X_resampled, y_resampled)
+    y_pred = rfm.predict(final_test)
+
+    ynew = rfm.predict_proba(final_test)
+    # show the inputs and predicted outputs
+    print(" yeni score", (ynew))
+    timeList = ["0 - 5 hours", "5 - 24 hours", "1 - 2 days", "2 - 3 days", " 3 - 4 days"]
+
+    """for i in range(len(final_test)):
+            return ynew[i]"""
+    print(timeList[ynew.tolist()[0].index(max(ynew.tolist()[0]))])
+    return timeList[ynew.tolist()[0].index(max(ynew.tolist()[0]))]

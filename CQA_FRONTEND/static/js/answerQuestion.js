@@ -1,8 +1,9 @@
 let idDict;
-
 userDataSaved = userData
 //data is the JSON string
 cookieUserData = JSON.parse(getCookie('userData'))
+document.getElementById("modeSelect").style.display = "none";
+
 $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSiteID + "/questions?order=desc&sort=activity&site=" + cookieUserData.selectedSiteParam + "&key=" + APIKEY, function (data_question) {
     if (data_question.items.length !== 0) {
         for (let i = 0; i < 5; i++) {

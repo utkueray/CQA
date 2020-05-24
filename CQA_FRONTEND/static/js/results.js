@@ -1,4 +1,5 @@
 let idDict = resultDict;
+document.getElementById("modeSelect").style.display = "none";
 
 let sortedIDArr = [];
 
