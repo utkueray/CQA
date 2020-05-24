@@ -241,7 +241,7 @@
         qText = $("#tagger").tagit("assignedTags").join(' ')
         tags = $("#tagger").tagit("assignedTags").join(' ')
 
-        window.location = "/results/" + userData.derived_userReputation + "/" + userData.derived_userViews + "/" + userData.derived_userUpVotes + "/" + userData.derived_userDownVotes + "/" + userData.derived_userCreationDate + "/" + userData.derived_userLastAccessDate + "/" + qTitle.split(' ').join('_').replace(/[?=]/g, "") + "/" + qText.split(' ').join('_').replace(/[?=]/g, "") + "/" + tags.split(' ').join('_') + "/"
+        window.location = "/tagsearch/" + userData.derived_userReputation + "/" + userData.derived_userViews + "/" + userData.derived_userUpVotes + "/" + userData.derived_userDownVotes + "/" + userData.derived_userCreationDate + "/" + userData.derived_userLastAccessDate + "/" + qTitle.split(' ').join('_').replace(/[?=]/g, "") + "/" + qText.split(' ').join('_').replace(/[?=]/g, "") + "/" + tags.split(' ').join('_') + "/"
 
     });
 

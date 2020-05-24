@@ -95,6 +95,38 @@ def answerQuestions(request):
                   context={'questionDict': questionDict, 'suggestionDict': suggestionDict})
 
 
+def tagSearch(request, derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
+            derived_userCreationDate, derived_userLastAccessDate, derived_title, derived_question, derived_tags):
+    title = derived_title.replace("_", " ", len(derived_title))
+    question = derived_question.replace("_", " ", len(derived_title))
+    tags = derived_tags
+
+    derived_userCreationDateFormat = datetime.fromtimestamp(derived_userCreationDate).isoformat()
+    derived_userLastAccessDateFormat = datetime.fromtimestamp(derived_userLastAccessDate).isoformat()
+
+    doc = title + question + tags
+
+    model = gensim.models.doc2vec.Doc2Vec.load("CQA_FRONTEND/static/data/doc2vecmodel")
+    test_corpus = list(read_corpus([doc], tokens_only=True))
+    inferred_vector = model.infer_vector(test_corpus[0])
+    sims = model.docvecs.most_similar([inferred_vector], topn=30)
+
+    resultDict = {}
+
+    for (key, val) in sims:
+        resultDict[key] = val
+
+    answerPercentage = \
+        willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
+                      derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)[1]
+
+    time = timePer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
+                             derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)
+
+    return render(request, 'tagsearch.html', context={'resultDict': resultDict, 'answerPercentage': answerPercentage,
+                                                    'time': time})
+
+
 def results(request, derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
             derived_userCreationDate, derived_userLastAccessDate, derived_title, derived_question, derived_tags):
     title = derived_title.replace("_", " ", len(derived_title))
