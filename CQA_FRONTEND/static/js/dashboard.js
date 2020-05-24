@@ -61,7 +61,7 @@ let userData = {
 }
 
 // select top 500 tags since more than that slows down website in current state
-let sampleTags = stackOverFlowTags.slice(0, 500);
+let sampleTags = aiStackExchangeTags;
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
