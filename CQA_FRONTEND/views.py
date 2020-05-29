@@ -44,16 +44,15 @@ def askQuestions(request):
 def answerQuestions(request):
     # get user data from cookies
     userData = (json.loads(request.COOKIES.get('userData')))
-    # get response from Stack Exchange API for questions that user asked 
-    response = requests.get("https://api.stackexchange.com/2.2/users/"
-                            + str(userData["selectedSiteID"]) +
-                            "/questions?order=desc&sort=activity&site=" + str(
-        userData["selectedSiteParam"]) + "&filter=!9Z(-wwYGT&key=" +
-                            str(userData["APIKEY"]))
-    print("https://api.stackexchange.com/2.2/users/"
-          + str(userData["selectedSiteID"]) +
-          "/questions?order=desc&sort=activity&site=" + str(userData["selectedSiteParam"]) + "&filter=!9Z(-wwYGT&key=" +
-          str(userData["APIKEY"]))
+    # get response from Stack Exchange API for questions that user asked
+
+    url = "https://api.stackexchange.com/2.2/users/" + str(
+        userData["selectedSiteID"]) + "/questions?order=desc&sort=activity&site=" + str(
+        userData["selectedSiteParam"]) + "&filter=!9Z(-wwYGT&key=" + str(userData["APIKEY"])
+
+    response = requests.get(url)
+
+    # print(url)
 
     # generate a dictionary to save suggestion questions based on all of the previous questions user asked
     suggestionTitle = ""
@@ -138,8 +137,7 @@ def results(request, derived_userReputation, derived_userViews, derived_userUpVo
     question = derived_question.replace("_", " ", len(derived_title))
     doc = title + question + derived_tags.replace("_", " ", len(derived_tags))
 
-    tags = "<"+derived_tags.replace("_", "><", len(derived_tags))+">"
-    print(tags)
+    tags = "<" + derived_tags.replace("_", "><", len(derived_tags)) + ">"
     derived_userCreationDateFormat = datetime.fromtimestamp(derived_userCreationDate).isoformat()
     derived_userLastAccessDateFormat = datetime.fromtimestamp(derived_userLastAccessDate).isoformat()
 
@@ -207,8 +205,15 @@ def encoder(x):
 
 
 # returns the probability of user getting an answer to the asked question
+# this function uses data saved in Task1_will_my_question_get_answered
+# please read Task1_will_my_question_get_answered to understand how this function/process works
+# takes shuffled_perc and newposts from Task1_will_my_question_get_answered
 def willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
                   derived_userCreationDate, derived_userLastAccessDate, derived_title, derived_question, derived_tags):
+    # load shuffled_final dataframe as pandas
+    shuffled_final = pd.read_pickle("CQA_FRONTEND/static/data/shuffled_perc")
+    # load newposts dataframe as pandas
+    newposts = pd.read_pickle("CQA_FRONTEND/static/data/newposts")
 
     df = pd.DataFrame(
         {'Question': [derived_question], 'Title': [derived_title], 'Creation Date': [derived_creation_date],
@@ -230,7 +235,6 @@ def willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes
     df["Creation Date"] = df["Creation Date"].apply(get_part_of_day)
     df["User Creation Date"] = df["User Creation Date"].apply(get_part_of_day)
     df["User Last Access Date"] = df["User Last Access Date"].apply(get_part_of_day)
-    df['Tag Count'] = df['Tags'].str.count('<')
 
     df["CreationDate_1"], df["CreationDate_2"], df["CreationDate_3"] = zip(*df['Creation Date'].map(encoder))
     df["UserCreationDate_1"], df["UserCreationDate_2"], df["UserCreationDate_3"] = zip(
@@ -238,48 +242,54 @@ def willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes
     df["UserLastAccessDate_1"], df["UserLastAccessDate_2"], df["UserLastAccessDate_3"] = zip(
         *df['User Last Access Date'].map(encoder))
 
+    df['Tag Count'] = df['Tags'].str.count('<')
     df['Tags'] = df['Tags'].str.replace('<', '')
     df['Tags'] = df['Tags'].str.replace('>', ' ')
     df['Tags'] = df['Tags'].str.replace('-', ' ')
     df['Tags'] = df['Tags'].str.split(' ')
 
-    test_tagsvecList = []
-    for index, row in df.iterrows():
-        train_corpus = list(read_corpus(row['Tags']))
+    cvec = CountVectorizer()
+    corpus = newposts['Tags'].tolist()
+    tags_vec = cvec.fit_transform(corpus)
+    tokens = cvec.get_feature_names()
+    wm2df(tags_vec, tokens)
+    newposts.insert(4, 'TagsVec', tags_vec)
+
+    alltags = pd.DataFrame(0, index=np.arange(1), columns=tokens)
+
+    for tag in df.iloc[0]['Tags']:
+        alltags[tag] = 1
+
+    q_tags_added = pd.concat([df, alltags], axis=1)
+
+    q_tags_added = q_tags_added.iloc[:, :-1]
+    q_tags_added['Content'] = q_tags_added[['Title', 'Question']].apply(lambda x: ' '.join(x), axis=1)
+    q_tags_added['Content'] = q_tags_added['Content'].str.lower().str.split()
+
+    q_vecList = []
+    for index, row in q_tags_added.iterrows():
+        train_corpus = list(read_corpus(row['Content']))
         model = gensim.models.doc2vec.Doc2Vec(vector_size=100, min_count=1, epochs=30)
         model.build_vocab(train_corpus)
-
-    for _ in df.iterrows():
         model.train(train_corpus, total_examples=model.corpus_count, epochs=model.epochs)
-        vector = model.infer_vector([])
-        test_tagsvecList.append(vector)
+        vector = model.infer_vector(row['Content'])
+        q_vecList.append(vector)
 
-    test_col_list = ['tags' + str(x) for x in range(0, 100)]
+    q_col_list = ['content' + str(x) for x in range(0, 100)]
+    q_doc2vecdf = pd.DataFrame(q_vecList, columns=q_col_list)
+    final_test = pd.concat([q_tags_added, q_doc2vecdf], axis=1)
+    final_test = final_test.drop(axis=1,
+                                 columns=["Content", "Question", "Title", "Creation Date", "Tags", "User Creation Date",
+                                          "User Last Access Date"])
 
-    doc2vecdf_test = pd.DataFrame(test_tagsvecList, columns=test_col_list)
-    test_df = pd.concat([df, doc2vecdf_test], axis=1)
+    final_test = final_test.reset_index()
 
-    test_df.replace(-9223372036854775808, 0)
-    test_df['Question'] = test_df['Question'].str.lower().str.split()
+    del final_test['index']
 
-    testcontentvecList = []
-    for _, row in test_df.iterrows():
-        train_corpus = list(read_corpus(row['Question']))
-        model = gensim.models.doc2vec.Doc2Vec(vector_size=100, min_count=1, epochs=30)
-        model.build_vocab(train_corpus)
-        model.train(train_corpus, total_examples=model.corpus_count, epochs=model.epochs)
-        vectortestcontent = model.infer_vector([])
-        testcontentvecList.append(vectortestcontent)
+    final_test = final_test.replace(-9223372036854775808, 0)
 
-    testcontent_col_list = ['content' + str(x) for x in range(0, 100)]
+    final_test.sort_index(axis=1, inplace=True)
 
-    doc2vecdf_testcontent = pd.DataFrame(testcontentvecList, columns=testcontent_col_list)
-    final_test = pd.concat([test_df, doc2vecdf_testcontent], axis=1)
-
-    final_test = final_test.drop(axis=1, columns=["Question", "Title", "Tags"])
-    final_test = final_test.drop(axis=1, columns=["Creation Date", "User Creation Date", "User Last Access Date"])
-
-    shuffled_final = pd.read_pickle("CQA_FRONTEND/static/data/shuffled_final")
     xtrain = shuffled_final.drop(axis=1, columns=['IsAnswered'])
     labels = shuffled_final['IsAnswered']
 
@@ -288,32 +298,30 @@ def willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes
 
     rfm.fit(xtrain, labels)
 
-    # fit final model
-    rfm = RandomForestClassifier(bootstrap=True, n_estimators=100, min_samples_leaf=1,
-                                 random_state=50, max_depth=50, min_samples_split=20)
-
-    rfm.fit(xtrain, labels)
-
-    yNew = rfm.predict_proba(final_test)
+    ynew = rfm.predict_proba(final_test)
     # show the inputs and predicted outputs
     for i in range(len(final_test)):
-        # print(" Predicted=%s" % (yNew[i]))
-        return yNew[i]
+        return ynew[i]
 
 
 # returns the period of time that user will get an answer to the asked question
+# this function uses data saved in Task2_when_will_my_question_get_answered.ipynb
+# please read Task2_when_will_my_question_get_answered.ipynb to understand how this function/process works
+# takes shuffled_time and new from Task1_will_my_question_get_answered
+
 def timePer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
             derived_userCreationDate, derived_userLastAccessDate, derived_title, derived_question, derived_tags):
+    # load shuffled dataframe as pandas
+    shuffled = pd.read_pickle("CQA_FRONTEND/static/data/shuffled_time")
+    # load new dataframe as pandas
+    new = pd.read_pickle("CQA_FRONTEND/static/data/new")
 
     cvec = CountVectorizer()
-    new = pd.read_pickle("CQA_FRONTEND/static/data/new")
     corpus = new['Tags'].tolist()
     tags_vec = cvec.fit_transform(corpus)
     tokens = cvec.get_feature_names()
     wm2df(tags_vec, tokens)
     new.insert(4, 'TagsVec', tags_vec)
-
-    shuffled = pd.read_pickle("CQA_FRONTEND/static/data/shuffled_time")
 
     df = pd.DataFrame(
         {'Question': [derived_question], 'Title': [derived_title], 'Creation Date': [derived_creation_date],
@@ -373,13 +381,13 @@ def timePer(derived_userReputation, derived_userViews, derived_userUpVotes, deri
         model.build_vocab(train_corpus)
         model.train(train_corpus, total_examples=model.corpus_count, epochs=model.epochs)
         vector = model.infer_vector(row['Content'])
-        # print(vector)
         q_vecList.append(vector)
 
     q_col_list = ['content' + str(x) for x in range(0, 100)]
     q_doc2vecdf = pd.DataFrame(q_vecList, columns=q_col_list)
     final_test = pd.concat([q_tags_added, q_doc2vecdf], axis=1)
-    final_test=final_test.drop(axis=1,columns=["Question","Title","Creation Date","Tags","User Creation Date","User Last Access Date"])
+    final_test = final_test.drop(axis=1, columns=["Question", "Title", "Creation Date", "Tags", "User Creation Date",
+                                                  "User Last Access Date"])
 
     final_test = final_test.drop(axis=1, columns=["Content"])
     final_test = final_test.reset_index()
@@ -399,12 +407,10 @@ def timePer(derived_userReputation, derived_userViews, derived_userUpVotes, deri
 
     ynew = rfm.predict_proba(final_test.to_numpy())
     # show the inputs and predicted outputs
-    print(" yeni score", (ynew))
     timeList = ["0 - 5 hours", "5 - 24 hours", "1 - 2 days", "2 - 3 days", " 3 - 4 days"]
 
     """for i in range(len(final_test)):
             return ynew[i]"""
-    print(timeList[ynew.tolist()[0].index(max(ynew.tolist()[0]))])
     return timeList[ynew.tolist()[0].index(max(ynew.tolist()[0]))]
 
 
