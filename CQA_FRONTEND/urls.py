@@ -2,14 +2,17 @@ from django.conf.urls import url
 from django.urls import path
 from . import views
 
+# page directories
+
 urlpatterns = [
     url(r'^$', views.home, name="homepage"),
     url(r'^test/$', views.test, name="test"),
     url(r'^dashboard/$', views.dashboard, name="dashboard"),
     url(r'^askQuestions/$', views.askQuestions, name="askQuestions"),
     url(r'^answerQuestions/$', views.answerQuestions, name="answerQuestions"),
-    path('results/<int:derived_userReputation>/<int:derived_userViews>/<int:derived_userUpVotes>/<int:derived_userDownVotes>/<int:derived_userCreationDate>/<int:derived_userLastAccessDate>/<derived_title>/<derived_question>/<derived_tags>/', views.results, name="results"),
-    path('tagsearch/<int:derived_userReputation>/<int:derived_userViews>/<int:derived_userUpVotes>/<int:derived_userDownVotes>/<int:derived_userCreationDate>/<int:derived_userLastAccessDate>/<derived_title>/<derived_question>/<derived_tags>/',
-        views.tagSearch, name="tagSearch")
+    path(
+        'results/<int:derived_userReputation>/<int:derived_userViews>/<int:derived_userUpVotes>/<int:derived_userDownVotes>/<int:derived_userCreationDate>/<int:derived_userLastAccessDate>/<derived_title>/<derived_question>/<derived_tags>/',
+        views.results, name="results"),
+    path('tagsearch/<derived_tags>/',views.tagSearch, name="tagSearch")
 
 ]

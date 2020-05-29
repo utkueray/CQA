@@ -1,43 +1,50 @@
 from django.shortcuts import render
 import pandas as pd
 import gensim, json
-from sklearn.ensemble import RandomForestClassifier
 from datetime import datetime
 import requests
-from imblearn.over_sampling import SMOTE, ADASYN
-from sklearn import metrics
-from sklearn.metrics import f1_score
-from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
+from imblearn.over_sampling import ADASYN
+from sklearn.ensemble import RandomForestClassifier
 
 # user date pulled from stackexchange API
 now = datetime.now()
-
 derived_creation_date = datetime.now().isoformat()
 
+# load doc2vec model once to make system work faster for every page
+model = gensim.models.doc2vec.Doc2Vec.load("CQA_FRONTEND/static/data/doc2vecmodel")
 
-# Create your views here.
 
+# load test view
 def test(request):
+    # testing new features
     return render(request, 'test.html')
 
 
+# load home view
 def home(request):
+    # index page
     return render(request, 'index.html')
 
 
+# load dashboard view
 def dashboard(request):
+    # first page seen by the user after login
     return render(request, 'dashboard.html')
 
 
+# load ask question view
 def askQuestions(request):
+    # all the functionality handled in the frontend
     return render(request, 'askQuestion.html')
 
 
+# load answer question view
 def answerQuestions(request):
+    # get user data from cookies
     userData = (json.loads(request.COOKIES.get('userData')))
-
+    # get response from Stack Exchange API for questions that user asked 
     response = requests.get("https://api.stackexchange.com/2.2/users/"
                             + str(userData["selectedSiteID"]) +
                             "/questions?order=desc&sort=activity&site=" + str(
@@ -47,45 +54,58 @@ def answerQuestions(request):
           + str(userData["selectedSiteID"]) +
           "/questions?order=desc&sort=activity&site=" + str(userData["selectedSiteParam"]) + "&filter=!9Z(-wwYGT&key=" +
           str(userData["APIKEY"]))
-    model = gensim.models.doc2vec.Doc2Vec.load("CQA_FRONTEND/static/data/doc2vecmodel")
 
-    questionDict = {}
-    suggestionDict = {}
-
+    # generate a dictionary to save suggestion questions based on all of the previous questions user asked
     suggestionTitle = ""
     suggestionQuestion = ""
     suggestionTags = []
 
     for item in response.json()["items"][:20]:
+        # question data that will be used in the model
+
         suggestionTitle += item["title"]
         suggestionQuestion += item["body"]
         suggestionTags += item["tags"]
 
     suggectionDoc = suggestionTitle + suggestionQuestion + ' '.join(map(str, suggestionTags))
 
-    test_corpus = list(read_corpus([suggectionDoc], tokens_only=True))
-    inferred_vector = model.infer_vector(test_corpus[0])
+    # generate a corpus with the question data
+    corpus = list(read_corpus([suggectionDoc], tokens_only=True))
+
+    # infer question data and get similarity results
+    inferred_vector = model.infer_vector(corpus[0])
     sims = model.docvecs.most_similar([inferred_vector], topn=5)
 
     resultDict = {}
 
+    # save id and similarity score for each question to result dict
     for (key, val) in sims:
         resultDict[str(key)] = val
 
     suggestionDict = resultDict
 
+    # generate a dictionary to save suggestion questions based on individual questions user asked
+
+    questionDict = {}
+
     for item in response.json()["items"][:5]:
+
+        # question data that will be used in the model
         title = item["title"]
         question = item["body"]
         tags = item["tags"]
         doc = title + question + ' '.join(map(str, tags))
 
-        test_corpus = list(read_corpus([doc], tokens_only=True))
-        inferred_vector = model.infer_vector(test_corpus[0])
+        # generate a corpus with the question data
+        corpus = list(read_corpus([doc], tokens_only=True))
+
+        # infer question data and get similarity results
+        inferred_vector = model.infer_vector(corpus[0])
         sims = model.docvecs.most_similar([inferred_vector], topn=5)
 
         resultDict = {}
 
+        # save id and similarity score for each question to result dict
         for (key, val) in sims:
             resultDict[str(key)] = val
 
@@ -95,20 +115,12 @@ def answerQuestions(request):
                   context={'questionDict': questionDict, 'suggestionDict': suggestionDict})
 
 
-def tagSearch(request, derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
-            derived_userCreationDate, derived_userLastAccessDate, derived_title, derived_question, derived_tags):
-    title = derived_title.replace("_", " ", len(derived_title))
-    question = derived_question.replace("_", " ", len(derived_title))
-    tags = derived_tags
-
-    derived_userCreationDateFormat = datetime.fromtimestamp(derived_userCreationDate).isoformat()
-    derived_userLastAccessDateFormat = datetime.fromtimestamp(derived_userLastAccessDate).isoformat()
-
-    doc = title + question + tags
-
-    model = gensim.models.doc2vec.Doc2Vec.load("CQA_FRONTEND/static/data/doc2vecmodel")
-    test_corpus = list(read_corpus([doc], tokens_only=True))
-    inferred_vector = model.infer_vector(test_corpus[0])
+# load tag search results view
+def tagSearch(request, derived_tags):
+    # generate corpus with user entered tags data
+    corpus = list(read_corpus([derived_tags.replace("_", " ", len(derived_tags))], tokens_only=True))
+    # infer vector with the corpus
+    inferred_vector = model.infer_vector(corpus[0])
     sims = model.docvecs.most_similar([inferred_vector], topn=30)
 
     resultDict = {}
@@ -116,31 +128,23 @@ def tagSearch(request, derived_userReputation, derived_userViews, derived_userUp
     for (key, val) in sims:
         resultDict[key] = val
 
-    answerPercentage = \
-        willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
-                      derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)[1]
-
-    time = timePer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
-                             derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)
-
-    return render(request, 'tagsearch.html', context={'resultDict': resultDict, 'answerPercentage': answerPercentage,
-                                                    'time': time})
+    return render(request, 'tagsearch.html', context={'resultDict': resultDict})
 
 
+# load results for askquestion view
 def results(request, derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
             derived_userCreationDate, derived_userLastAccessDate, derived_title, derived_question, derived_tags):
     title = derived_title.replace("_", " ", len(derived_title))
     question = derived_question.replace("_", " ", len(derived_title))
-    tags = derived_tags
+    doc = title + question + derived_tags.replace("_", " ", len(derived_tags))
 
+    tags = "<"+derived_tags.replace("_", "><", len(derived_tags))+">"
+    print(tags)
     derived_userCreationDateFormat = datetime.fromtimestamp(derived_userCreationDate).isoformat()
     derived_userLastAccessDateFormat = datetime.fromtimestamp(derived_userLastAccessDate).isoformat()
 
-    doc = title + question + tags
-
-    model = gensim.models.doc2vec.Doc2Vec.load("CQA_FRONTEND/static/data/doc2vecmodel")
-    test_corpus = list(read_corpus([doc], tokens_only=True))
-    inferred_vector = model.infer_vector(test_corpus[0])
+    corpus = list(read_corpus([doc], tokens_only=True))
+    inferred_vector = model.infer_vector(corpus[0])
     sims = model.docvecs.most_similar([inferred_vector], topn=30)
 
     resultDict = {}
@@ -153,12 +157,13 @@ def results(request, derived_userReputation, derived_userViews, derived_userUpVo
                       derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)[1]
 
     time = timePer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
-                             derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)
+                   derived_userCreationDateFormat, derived_userLastAccessDateFormat, title, question, tags)
 
     return render(request, 'results.html', context={'resultDict': resultDict, 'answerPercentage': answerPercentage,
                                                     'time': time})
 
 
+# returns document for corpus generation and if necessary tokenize
 def read_corpus(fname, tokens_only=False):
     for i, line in enumerate(fname):
         tokens = gensim.utils.simple_preprocess(line)
@@ -169,6 +174,7 @@ def read_corpus(fname, tokens_only=False):
             yield gensim.models.doc2vec.TaggedDocument(tokens, [i])
 
 
+# returns part of the day depending on the input
 def get_part_of_day(x):
     return (
         "1" if 5 <= int(x.strftime('%H')) <= 10
@@ -181,6 +187,7 @@ def get_part_of_day(x):
     )
 
 
+# encoder
 def encoder(x):
     a = 0.0
     b = 0.0
@@ -199,9 +206,9 @@ def encoder(x):
         return a, b, c
 
 
+# returns the probability of user getting an answer to the asked question
 def willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
                   derived_userCreationDate, derived_userLastAccessDate, derived_title, derived_question, derived_tags):
-    # create a new data frame
 
     df = pd.DataFrame(
         {'Question': [derived_question], 'Title': [derived_title], 'Creation Date': [derived_creation_date],
@@ -294,21 +301,19 @@ def willAnswerPer(derived_userReputation, derived_userViews, derived_userUpVotes
         return yNew[i]
 
 
-def get_part_of_day(x):
-    return (
-        "1" if 5 <= int(x.strftime('%H')) <= 10
-        else
-        "2" if 11 <= int(x.strftime('%H')) <= 16
-        else
-        "3" if 17 <= int(x.strftime('%H')) <= 22
-        else
-        "4"
-    )
-
-
+# returns the period of time that user will get an answer to the asked question
 def timePer(derived_userReputation, derived_userViews, derived_userUpVotes, derived_userDownVotes,
             derived_userCreationDate, derived_userLastAccessDate, derived_title, derived_question, derived_tags):
-    # create a new data frame
+
+    cvec = CountVectorizer()
+    new = pd.read_pickle("CQA_FRONTEND/static/data/new")
+    corpus = new['Tags'].tolist()
+    tags_vec = cvec.fit_transform(corpus)
+    tokens = cvec.get_feature_names()
+    wm2df(tags_vec, tokens)
+    new.insert(4, 'TagsVec', tags_vec)
+
+    shuffled = pd.read_pickle("CQA_FRONTEND/static/data/shuffled_time")
 
     df = pd.DataFrame(
         {'Question': [derived_question], 'Title': [derived_title], 'Creation Date': [derived_creation_date],
@@ -325,13 +330,9 @@ def timePer(derived_userReputation, derived_userViews, derived_userUpVotes, deri
     df['Views'] = df['Views'].astype(int)
 
     search = "Wh"
-    # what when where why
 
-    # boolean series returned
     df["isQuestionwh"] = df["Title"].str.startswith(search).astype(int)
-
     df['isWeekend'] = pd.to_datetime(df['Creation Date']).dt.dayofweek
-
     df["isWeekend"] = (df["isWeekend"] < 5).astype(int)
 
     df["Creation Date"] = df["Creation Date"].apply(get_part_of_day)
@@ -353,12 +354,6 @@ def timePer(derived_userReputation, derived_userViews, derived_userUpVotes, deri
     df['Tags'] = df['Tags'].str.replace('-', ' ')
     df['Tags'] = df['Tags'].str.split(' ')
 
-    cvec = CountVectorizer()
-    new = pd.read_pickle("CQA_FRONTEND/static/data/new")
-    corpus = new['Tags'].tolist()
-    cvec.fit_transform(corpus)
-    tokens = cvec.get_feature_names()
-
     alltags = pd.DataFrame(0, index=np.arange(1), columns=tokens)
     for tag in df.iloc[0]['Tags']:
         alltags[tag] = 1
@@ -366,31 +361,31 @@ def timePer(derived_userReputation, derived_userViews, derived_userUpVotes, deri
     q_tags_added = pd.concat([df, alltags], axis=1)
 
     q_tags_added = q_tags_added.iloc[:, :-1]
-    q_tags_added['Content'] = q_tags_added[['Title', 'Question']].apply(lambda x: ' '.join(x), axis=1)
 
+    q_tags_added['Content'] = q_tags_added[['Title', 'Question']].apply(lambda x: ' '.join(x), axis=1)
     q_tags_added['Content'] = q_tags_added['Content'].str.lower().str.split()
 
     q_vecList = []
+
     for index, row in q_tags_added.iterrows():
         train_corpus = list(read_corpus(row['Content']))
         model = gensim.models.doc2vec.Doc2Vec(vector_size=100, min_count=1, epochs=30)
         model.build_vocab(train_corpus)
         model.train(train_corpus, total_examples=model.corpus_count, epochs=model.epochs)
-        vector = model.infer_vector([])
+        vector = model.infer_vector(row['Content'])
         # print(vector)
         q_vecList.append(vector)
 
     q_col_list = ['content' + str(x) for x in range(0, 100)]
     q_doc2vecdf = pd.DataFrame(q_vecList, columns=q_col_list)
     final_test = pd.concat([q_tags_added, q_doc2vecdf], axis=1)
-    final_test = final_test.drop(axis=1, columns=["Question", "Title", "Creation Date", "Tags", "User Creation Date",
-                                                  "User Last Access Date"])
+    final_test=final_test.drop(axis=1,columns=["Question","Title","Creation Date","Tags","User Creation Date","User Last Access Date"])
+
     final_test = final_test.drop(axis=1, columns=["Content"])
     final_test = final_test.reset_index()
-    #del final_test['index']
+    del final_test['index']
     final_test = final_test.replace(-9223372036854775808, 0)
     final_test.sort_index(axis=1, inplace=True)
-    shuffled = pd.read_pickle("CQA_FRONTEND/static/data/shuffled2")
 
     xtrain = shuffled.drop(axis=1, columns=['diff_in_minutes'])
     labels = shuffled['diff_in_minutes']
@@ -401,9 +396,8 @@ def timePer(derived_userReputation, derived_userViews, derived_userUpVotes, deri
                                  random_state=50, max_depth=50, min_samples_split=20, class_weight="balanced")
 
     rfm.fit(X_resampled, y_resampled)
-    y_pred = rfm.predict(final_test)
 
-    ynew = rfm.predict_proba(final_test)
+    ynew = rfm.predict_proba(final_test.to_numpy())
     # show the inputs and predicted outputs
     print(" yeni score", (ynew))
     timeList = ["0 - 5 hours", "5 - 24 hours", "1 - 2 days", "2 - 3 days", " 3 - 4 days"]
@@ -412,3 +406,11 @@ def timePer(derived_userReputation, derived_userViews, derived_userUpVotes, deri
             return ynew[i]"""
     print(timeList[ynew.tolist()[0].index(max(ynew.tolist()[0]))])
     return timeList[ynew.tolist()[0].index(max(ynew.tolist()[0]))]
+
+
+def wm2df(wm, feat_names):
+    # create an index for each row
+    doc_names = ['Doc{:d}'.format(idx) for idx, _ in enumerate(wm)]
+    df = pd.DataFrame(data=wm.toarray(), index=doc_names,
+                      columns=feat_names)
+    return (df)
