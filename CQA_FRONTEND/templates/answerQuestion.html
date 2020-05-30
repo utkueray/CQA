@@ -224,8 +224,8 @@
 
 <script>
     $(function () {
-        // singleFieldTags2 is an INPUT element, rather than a UL as in the other
-        // examples, so it automatically defaults to singleField.
+        // construction of tag library
+
         $('#tagger').tagit({
             availableTags: sampleTags,
             allowDuplicates: false,
@@ -235,10 +235,9 @@
 
     });
 
+    // get tags selected by user and pass to tagsearch page as url parameter
     $("#tagSubmit").click(function () {
 
-        qTitle = $("#tagger").tagit("assignedTags").join(' ')
-        qText = $("#tagger").tagit("assignedTags").join(' ')
         tags = $("#tagger").tagit("assignedTags").join(' ')
 
         window.location = "/tagsearch/" + tags.split(' ').join('_') + "/"
@@ -283,22 +282,22 @@
             '                </div>\n' +
             '            </div>\n'
 
+        // if user has questions that has been asked before, display divs for suggestion and similar questions
         $('#content-datas').append(html);
 
+        // individual questions data
         let answerDict = "{{questionDict}}";
-
         let str = answerDict.split("&#x27;").join('"').split("&quot;").join("");
-
         let resultDict = JSON.parse(str);
-        console.log(resultDict);
+
     {% endif %}
 
     {% if suggestionDict %}
+        //suggestions data
         let suggestionsDict = "{{suggestionDict}}";
         let str2 = suggestionsDict.split("&#x27;").join('"').split("&quot;").join("");
         let suggestions = JSON.parse(str2);
 
-        console.log(suggestions)
     {% endif %}
 
 </script>

@@ -171,14 +171,11 @@
 
 
 <script type='text/javascript'>
-    // For simplicity, we're using jQuery for some things
-    //   However, the library has no jQuery dependency
 
     $(function () {
-// Initialize library
+        // Initialize Stack Exchange library
         SE.init({
-            // Parameters obtained by registering an app, these are specific to the SE
-            //   documentation site
+            // Parameters obtained by registering an app, these are specific to the individual apps
             clientId: 16684,
             key: 'unCQQDAhgl)qZ4GZRXVVGQ((',
             // Used for cross domain communication, it will be validated
@@ -194,7 +191,7 @@
 
         let accountID = "";
         let accessToken = "";
-// Attach click handler to login button
+        // Attach click handler to login button
         $('#login-button').click(function () {
             // Make the authentication call, note that being in an onclick handler
             //   is important; most browsers will hide windows opened without a
@@ -202,6 +199,7 @@
 
             SE.authenticate({
                 success: function (data) {
+                    // get and save necessary user data to localstorage
                     accountID = data.networkUsers[0].account_id;
                     accessToken = data.accessToken;
                     localStorage.setItem("accountID", data.networkUsers[0].account_id);
@@ -211,6 +209,7 @@
                     window.location = "{% url 'dashboard' %}"
                 },
                 error: function (data) {
+                    // error stuff
                     console.log('An error occurred:\n' + data.errorName + '\n' + data.errorMessage);
                 },
                 networkUsers: true

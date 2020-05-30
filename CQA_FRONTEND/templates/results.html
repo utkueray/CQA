@@ -227,9 +227,12 @@
 <script type="text/javascript">
 
     {% if resultDict %}
+        // get results, answer percentage and time period
         let resultDict = {{resultDict}};
         let answerPercentage = {{answerPercentage}};
         let time = "{{ time }}";
+
+        // display answer percentage and time period for user to be able to see it
         document.getElementById("probability").innerText = "Your question may get an answer with the probability of " + (100 * answerPercentage).toFixed(2) + "% within " + time + ".";
 
     {% endif %}
