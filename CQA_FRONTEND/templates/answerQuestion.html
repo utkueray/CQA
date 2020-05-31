@@ -250,6 +250,7 @@
 <script type="text/javascript">
 
     {% if questionDict %}
+        // if question dict exists, add suggestion questions and similar question sections to the page
         let html = '\n' +
             '            <div id= "suggestion-questions" class=" justify-content-center" style="margin-top: 50px">\n' +
             '                <div class="card shadow ">\n' +
@@ -282,7 +283,6 @@
             '                </div>\n' +
             '            </div>\n'
 
-        // if user has questions that has been asked before, display divs for suggestion and similar questions
         $('#content-datas').append(html);
 
         // individual questions data

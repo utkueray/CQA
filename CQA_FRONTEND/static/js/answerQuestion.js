@@ -1,11 +1,13 @@
-let idDict;
-userDataSaved = userData
-//data is the JSON string
+// initialize userData by getting from cookie and saving to to a local variable
 cookieUserData = JSON.parse(getCookie('userData'))
+// do not display test mode options because it can cause bugs, just let user select the option on dashboard
 document.getElementById("modeSelect").style.display = "none";
 
+// API calls for questions that user asked before
 $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSiteID + "/questions?order=desc&sort=activity&site=" + cookieUserData.selectedSiteParam + "&key=" + APIKEY, function (data_question) {
-    if (data_question.items.length !== 0) {
+    // generate individual sections for datatables that each question will have
+    // display suggest title on the left top side of the card
+    if (data_question.items.length !== 0) { // check if user has any questions
         for (let i = 0; i < 5; i++) {
             let title = data_question.items[i].title;
             let d = document.createElement('div');
@@ -22,7 +24,6 @@ $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSi
                 )
             )
         }
-
         $("#suggestions-oneforall").append(
             $('<div>').append(
                 $('<div>').addClass('card shadow mb-4').append(
@@ -39,7 +40,7 @@ $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSi
             console.log(ids);
 
             if (resultDict[ids] != null) {
-
+                // make batch request to API
                 let queryS = "https://api.stackexchange.com/2.2/questions/";
                 let queryE = "?order=desc&sort=activity&site=" + cookieUserData.selectedSiteParam + "&key=" + APIKEY;
                 for (let key in resultDict[ids]) {
@@ -77,15 +78,15 @@ $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSi
                         let date;
 
                         for (let j = 0; j < data.items.length; j++) {
-                            idDict = resultDict[ids]
                             title = data.items[j].title;
                             link = data.items[j]["link"];
                             question_id = data.items[j].question_id;
-                            score = Math.round(idDict[question_id] * 10000) / 100;
+                            score = Math.round(resultDict[ids][question_id] * 10000) / 100;
                             date = new Date(data.items[j].creation_date * 1000).toLocaleDateString("en-GB");
                             accepted_answer_id = data.items[j].accepted_answer_id;
                             answer_count = data.items[j].answer_count;
 
+                            // get add question datas to datatable : title, date, score, link
                             $('#' + ids).append(
                                 $('<tr>').attr('href', link).attr('target', '_blank').append(
                                     $('<td>').addClass('m-0 font-weight-bold').text(score + "%"),
@@ -97,6 +98,7 @@ $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSi
                             )
                         }
 
+                        // initialize datatable
                         $('#dt-filter-select' + ids).dataTable({
                             order: [[0, "desc"]],
                             bFilter: true,
@@ -151,6 +153,7 @@ $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSi
 
         if (suggestions != null) {
 
+            // make a batch request to API with multiple question ids
             let queryS = "https://api.stackexchange.com/2.2/questions/";
             let queryE = "?order=desc&sort=activity&site=" + cookieUserData.selectedSiteParam + "&key=" + APIKEY;
             for (let key in suggestions) {
@@ -158,7 +161,8 @@ $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSi
             }
             // generate a query string
             queryS = queryS.slice(0, -1) + queryE;
-            // GET query results as data obj
+
+            // get each questions data from API
             $.getJSON(queryS, function (data) {
                 if (data.items.length === 0) {
                     console.log("There is no data to show.")
@@ -188,15 +192,15 @@ $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSi
                     let date;
 
                     for (let j = 0; j < data.items.length; j++) {
-                        idDict = suggestions
                         title = data.items[j].title;
                         link = data.items[j]["link"];
                         question_id = data.items[j].question_id;
-                        score = Math.round(idDict[question_id] * 10000) / 100;
+                        score = Math.round(suggestions[question_id] * 10000) / 100;
                         date = new Date(data.items[j].creation_date * 1000).toLocaleDateString("en-GB");
                         accepted_answer_id = data.items[j].accepted_answer_id;
                         answer_count = data.items[j].answer_count;
 
+                        // add data of each question to datatable: title, score, date and link
                         $('#' + 'dt-filter-select-suggestion-body').append(
                             $('<tr>').attr('href', link).attr('target', '_blank').append(
                                 $('<td>').addClass('m-0 font-weight-bold').text(score + "%"),
@@ -208,6 +212,7 @@ $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSi
                         )
                     }
 
+                    // initialize datatable
                     $('#dt-filter-select-suggestion').dataTable({
                         order: [[0, "desc"]],
                         bFilter: true,
@@ -259,14 +264,3 @@ $.getJSON("https://api.stackexchange.com/2.2/users/" + cookieUserData.selectedSi
         console.log("User has no question.")
     }
 });
-
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-}
