@@ -1,10 +1,6 @@
 // necessary variables will be stored here to initialize the project
 
-
-// select the stackexchange q&a community that will be used in the website
-// i.e. StackOverflow = stackoverflow
-//      ArtificialIntelligence = ai
-
+// load sites data from sites.js
 var sitesData = JSON.parse(sites);
 
 function logOut() {

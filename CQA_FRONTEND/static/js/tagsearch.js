@@ -1,3 +1,5 @@
+//Refer to the results.js, works exactly the same way and utilizes same structure
+
 let idDict = resultDict;
 document.getElementById("modeSelect").style.display = "none";
 
