@@ -1,8 +1,11 @@
+// initialize variables
 let qText = "";
 let qTitle = "";
 let tags = "";
+// do not display test mode buttons on this page
 document.getElementById("modeSelect").style.display = "none";
 
+// initialize text editor
 var simplemde = new SimpleMDE({
 
     autofocus: true,
@@ -52,6 +55,7 @@ var simplemde = new SimpleMDE({
     ],
 });
 
+// initialize tag suggestion section
 $('#tagger').tagit({
     availableTags: sampleTags,
     allowDuplicates: false,
@@ -60,7 +64,8 @@ $('#tagger').tagit({
 
 });
 
-function writeDB() {
+// submit data to backend and send user to results page
+function submitData() {
 
     qTitle = document.getElementById('qTitle').value
     qText = simplemde.value();
