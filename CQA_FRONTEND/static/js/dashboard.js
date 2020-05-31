@@ -1,3 +1,4 @@
+// gets bool value of option1 which tells us if user selected test mode or not
 if (getCookie("option1")) {
     $("#selector :input")[0].checked = true;
     $("#selector :input")[1].checked = false;
@@ -16,10 +17,11 @@ if (getCookie("option1")) {
 let accessToken = localStorage.getItem("accessToken");
 let selectedSiteID = ""
 let accountID = ""
+
 // APIKEY registered to this app by Stack Exchange
 let APIKEY = "unCQQDAhgl)qZ4GZRXVVGQ((";
 
-
+// change accountID depending on if test mode is selected or not
 if ($("#selector :input")[0].checked) {
     console.log("Test Mode Activated");
     accountID = "4148701"
@@ -28,6 +30,7 @@ if ($("#selector :input")[0].checked) {
     accountID = localStorage.getItem("accountID");
 }
 
+// set accountID and option1 bool when user select test mode: on or off
 $("#selector :input").change(function () {
     if (this.id === "option1") {
         console.log("Test Mode Activated");
@@ -43,7 +46,7 @@ $("#selector :input").change(function () {
 
 });
 
-// user data that will be used for both api calls and for parameters for machine learning models
+// user data that will be used for both api calls and for parameters of machine learning models
 let userData = {
     accessToken: accessToken,
     accountID: accountID,
@@ -60,27 +63,26 @@ let userData = {
     selectedSiteID: "",
 }
 
-// select top 500 tags since more than that slows down website in current state
+// get tags from stored js file for suggesting user while typing an existing tag
 let sampleTags = aiStackExchangeTags;
 
+// capitalizing strings function
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 // find the parameter for the appropriate site such as Stack Overflow -> stackoverflow
+// since the website works on Artificial Intelligence website of Stack Exchange, currently it is static, will be dynamic in the future
 userData.selectedSite = "https://ai.stackexchange.com"
 
+// fill userData with the data of currently active site
 for (let i = 0; i < sitesData.length; i++) {
-
     if (userData.selectedSite === sitesData[i].site_url) {
-        //console.log(sitesData[i])
-
         userData.selectedSiteParam = sitesData[i].api_site_parameter
-
     }
 }
 
-
+// if user is logged out, force them to index page with a simple alert
 if (accountID != null || accessToken != null) {
 
     $.getJSON("https://api.stackexchange.com/2.2/users/" + accountID + "/associated?pagesize=50&filter=!*K3Z9x9w-2fKbidf&key=" + APIKEY, function (data_account) {
@@ -89,7 +91,6 @@ if (accountID != null || accessToken != null) {
         for (let i = 0; i < items.length; i++) {
             if (!(items[i].site_name in userData.sites)) {
                 userData.sites[items[i].site_url] = items[i].user_id
-                //console.log(items[i])
             }
         }
 
