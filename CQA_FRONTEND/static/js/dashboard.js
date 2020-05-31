@@ -82,22 +82,26 @@ for (let i = 0; i < sitesData.length; i++) {
     }
 }
 
-// if user is logged out, force them to index page with a simple alert
+// last check point before retrieving user data, check for accountID and accessToken before API calls.
 if (accountID != null || accessToken != null) {
 
+    // API call for user data on Stack Exchange
     $.getJSON("https://api.stackexchange.com/2.2/users/" + accountID + "/associated?pagesize=50&filter=!*K3Z9x9w-2fKbidf&key=" + APIKEY, function (data_account) {
-        //data is the JSON string
         let items = data_account.items;
         for (let i = 0; i < items.length; i++) {
             if (!(items[i].site_name in userData.sites)) {
+                // save user information on the registered sites
                 userData.sites[items[i].site_url] = items[i].user_id
             }
         }
 
+        // can let user select the prefered site dynamically in the future, it's currently static
         selectedSiteID = userData.sites[userData.selectedSite]
         userData.selectedSiteID = selectedSiteID
+
         $.getJSON("https://api.stackexchange.com/2.2/users/" + userData.selectedSiteID + "?order=desc&sort=reputation&site=" + userData.selectedSiteParam + "&filter=!-*jbN*IioeFP&key=" + APIKEY, function (data_user) {
-            //data is the JSON string
+
+            // set user data on the dashboard page
             $("#avatarImage").attr("src", " https://proxy.duckduckgo.com/iu/?u=" + data_user.items[0].profile_image);
             $("#accountType").text(capitalizeFirstLetter(data_user.items[0].user_type));
             $("#userName").text(data_user.items[0].display_name);
@@ -105,6 +109,7 @@ if (accountID != null || accessToken != null) {
             $("#userAnswers").text(data_user.items[0].answer_count);
             $("#userRep").text(data_user.items[0].reputation);
 
+            // save relevant information about user to userData dictionary
             userData.derived_userReputation = data_user.items[0].reputation;
             userData.derived_userViews = data_user.items[0].view_count;
             userData.derived_userUpVotes = data_user.items[0].up_vote_count;
@@ -112,16 +117,19 @@ if (accountID != null || accessToken != null) {
             userData.derived_userCreationDate = data_user.items[0].creation_date;
             userData.derived_userLastAccessDate = data_user.items[0].last_access_date;
 
+            // API call for getting questions that user asked
             $.getJSON("https://api.stackexchange.com/2.2/users/" + userData.selectedSiteID + "/questions?order=desc&sort=activity&site=" + userData.selectedSiteParam + "&key=" + APIKEY, function (data_question) {
-
+                // goes in if user has asked questions previously
                 if (data_question.items.length !== 0) {
+                    // add title to the page
                     let html = '<div class="d-sm-flex align-items-center justify-content-between mb-4"><h1 class="h3 mb-0 text-gray-800">Asked Questions</h1></div><div id="questionsWrapper"></div>'
-
                     $('#content-user-questions').append(html);
 
+                    // save question data as cookie for future usage in other pages and in backend
                     let json_str = JSON.stringify(data_question);
                     setCookie('data_question', json_str, 100);
 
+                    // display user questions in card format
                     for (let i = 0; i < data_question.items.length; i++) {
                         let title = data_question.items[i].title;
                         let d = document.createElement('div');
@@ -153,16 +161,20 @@ if (accountID != null || accessToken != null) {
                 }
             });
 
+            // API call for getting questions that user answered
             $.getJSON("https://api.stackexchange.com/2.2/users/" + userData.selectedSiteID + "/answers?order=desc&sort=activity&site=" + userData.selectedSiteParam + "&filter=!)s4ZC4Clxhenq7j1nk6d&key=" + APIKEY, function (data_answer) {
+                // goes in if user has answered questions previously
                 if (data_answer.items.length !== 0) {
 
+                    // add title to the page
                     let html = '<div class="d-sm-flex align-items-center justify-content-between mb-4"><h1 class="h3 mb-0 text-gray-800">Answered Questions</h1></div><div id="answersWrapper"></div>'
-
                     $('#content-user-questions').append(html);
-                    let json_str = JSON.stringify(data_answer);
 
+                    // save question data as cookie for future usage
+                    let json_str = JSON.stringify(data_answer);
                     setCookie('data_answer', json_str, 100);
 
+                    // display questions in card format
                     for (let i = 0; i < data_answer.items.length; i++) {
                         let title = data_answer.items[i].title;
                         let d = document.createElement('div');
@@ -192,6 +204,8 @@ if (accountID != null || accessToken != null) {
 
                     }
                 }
+
+                // save userData dictionary as cookie to use it in other pages and in the backend if necessary
                 let json_str = JSON.stringify(userData);
                 setCookie('userData', json_str, 100);
 
@@ -202,11 +216,12 @@ if (accountID != null || accessToken != null) {
     });
 
 } else {
-
+    // alert and move user to index page
     alert("Please login with StackExchange account.")
     window.location = "/"
 }
 
+// set and get cookie functions
 function setCookie(name, value, days) {
     var expires = "";
     if (days) {
@@ -226,10 +241,6 @@ function getCookie(name) {
         if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
     }
     return null;
-}
-
-function eraseCookie(name) {
-    document.cookie = name + '=; Max-Age=-99999999;';
 }
 
 

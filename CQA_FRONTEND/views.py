@@ -47,7 +47,7 @@ def answerQuestions(request):
     # get response from Stack Exchange API for questions that user asked
 
     url = "https://api.stackexchange.com/2.2/users/" + str(
-        userData["selectedSiteID"]) + "/questions?order=desc&sort=activity&site=" + str(
+        userData["selectedSiteID"]) + "/answers?order=desc&sort=activity&site=" + str(
         userData["selectedSiteParam"]) + "&filter=!9Z(-wwYGT&key=" + str(userData["APIKEY"])
 
     response = requests.get(url)
