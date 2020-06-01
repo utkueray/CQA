@@ -59,44 +59,18 @@ def answerQuestions(request):
     suggestionQuestion = ""
     suggestionTags = []
 
-    for item in response.json()["items"][:20]:
-        # question data that will be used in the model
+    if "items" in response.json():
+        for item in response.json()["items"][:20]:
+            # question data that will be used in the model
 
-        suggestionTitle += item["title"]
-        suggestionQuestion += item["body"]
-        suggestionTags += item["tags"]
+            suggestionTitle += item["title"]
+            suggestionQuestion += item["body"]
+            suggestionTags += item["tags"]
 
-    suggectionDoc = suggestionTitle + suggestionQuestion + ' '.join(map(str, suggestionTags))
-
-    # generate a corpus with the question data
-    corpus = list(read_corpus([suggectionDoc], tokens_only=True))
-
-    # infer question data and get similarity results
-    inferred_vector = model.infer_vector(corpus[0])
-    sims = model.docvecs.most_similar([inferred_vector], topn=5)
-
-    resultDict = {}
-
-    # save id and similarity score for each question to result dict
-    for (key, val) in sims:
-        resultDict[str(key)] = val
-
-    suggestionDict = resultDict
-
-    # generate a dictionary to save suggestion questions based on individual questions user asked
-
-    questionDict = {}
-
-    for item in response.json()["items"][:5]:
-
-        # question data that will be used in the model
-        title = item["title"]
-        question = item["body"]
-        tags = item["tags"]
-        doc = title + question + ' '.join(map(str, tags))
+        suggectionDoc = suggestionTitle + suggestionQuestion + ' '.join(map(str, suggestionTags))
 
         # generate a corpus with the question data
-        corpus = list(read_corpus([doc], tokens_only=True))
+        corpus = list(read_corpus([suggectionDoc], tokens_only=True))
 
         # infer question data and get similarity results
         inferred_vector = model.infer_vector(corpus[0])
@@ -108,7 +82,36 @@ def answerQuestions(request):
         for (key, val) in sims:
             resultDict[str(key)] = val
 
-        questionDict[str(item["question_id"])] = str(resultDict)
+        suggestionDict = resultDict
+
+        # generate a dictionary to save suggestion questions based on individual questions user asked
+
+        questionDict = {}
+
+        for item in response.json()["items"][:5]:
+
+            # question data that will be used in the model
+            title = item["title"]
+            question = item["body"]
+            tags = item["tags"]
+            doc = title + question + ' '.join(map(str, tags))
+
+            # generate a corpus with the question data
+            corpus = list(read_corpus([doc], tokens_only=True))
+
+            # infer question data and get similarity results
+            inferred_vector = model.infer_vector(corpus[0])
+            sims = model.docvecs.most_similar([inferred_vector], topn=5)
+
+            resultDict = {}
+
+            # save id and similarity score for each question to result dict
+            for (key, val) in sims:
+                resultDict[str(key)] = val
+
+            questionDict[str(item["question_id"])] = str(resultDict)
+    else:
+        print(response.json())
 
     return render(request, 'answerQuestion.html',
                   context={'questionDict': questionDict, 'suggestionDict': suggestionDict})
