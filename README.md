@@ -2,11 +2,11 @@
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+Download the project by cloning the following link or download the zip version from github.
 
 ```
 https://github.com/utkueray/CQA.git
@@ -27,7 +27,8 @@ pip install -r requirements.txt --user
 
 ## Running
 
-Running the system is fairly easy after downloading necessary python libraries. Enter the following command to your command line, or you can use a Pycharm which is tested and works fine.
+Running the system is fairly easy after installing necessary python libraries. 
+Enter the following command to your command line, or you can use a Pycharm which is tested and works fine.
 
 ```
 python manage.py runserver 80
