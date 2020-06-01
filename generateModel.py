@@ -94,12 +94,12 @@ model = gensim.models.doc2vec.Doc2Vec(min_count=1,window=5,vector_size=300,worke
 
 model.build_vocab(train_corpus)
 
-print("Traning the doc2vec model.")
+print("Training the doc2vec model...")
 
 model.train(train_corpus, total_examples=model.corpus_count, epochs=model.epochs)
 
 path = "CQA_FRONTEND/static/data/doc2vecmodel"
 
-print("Model saved to the path: ", path)
+print("Model saved to ", path)
 
 model.save(path)
