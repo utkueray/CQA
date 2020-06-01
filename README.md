@@ -38,6 +38,7 @@ python manage.py runserver 80
 * **Mehmet Utku Eray** - *Initial work* - [utkueray](https://github.com/utkueray)
 * **Deniz Bozkurt** - *Initial work* - [DenizBozkurt](https://github.com/DenizBozkurt)
 * **Zeynep Seda Birinci** - *Initial work* - [zseda](https://github.com/zseda)
+* **Selen Özcan** - *Initial work*
 
 ## Copyright and License
 
