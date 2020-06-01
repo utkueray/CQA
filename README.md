@@ -12,19 +12,30 @@ Download the project by cloning the following link or download the zip version f
 https://github.com/utkueray/CQA.git
 ```
 
+Please use Python3, if possible Python 3.6.X or Python 3.8.X version, assuming that it will work on Python 3.7.X but never tested it.
+
+Also, please use version 3 of Pip while installing.
+
+You may have to define Python and Pip version while running scripts, therefore becareful while copying commands.
+
+
+
 ### Installing
 
 After downloading the project file, you have to open a command line with Python 3.6.X or Python 3.8.X installed and navigate to the project folder.
 
 You can install necessary python libraries with typing the following command in to your command line.
 
+
+
 ```
 pip install -r requirements.txt
 ```
+
 or
 
 ```
-pip install -r requirements.txt --user
+pip3 install -r requirements.txt
 ```
 
 Also, you have to run the following script in command line to generate doc2vec model in the predefined path.
@@ -33,6 +44,11 @@ Also, you have to run the following script in command line to generate doc2vec m
 python generateModel.py
 ```
 
+or
+
+```
+python3 generateModel.py
+```
 ## Running
 
 Running the system is fairly easy after installing necessary python libraries.
@@ -42,6 +58,17 @@ Enter the following command to your command line, or you can use a PyCharm which
 python manage.py runserver 80
 ```
 
+or
+
+```
+python3 manage.py runserver 80
+```
+
+or ( if you are using MAC OS)
+
+```
+sudo python3 manage.py runserver 80
+```
 ## Authors
 
 * **Mehmet Utku Eray** - *Initial work* - [utkueray](https://github.com/utkueray)
