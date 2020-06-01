@@ -48,3 +48,4 @@ Copyright 2019-2020 Sabanci University. Code released under the MIT license - se
 
 * [Sb-Admin-2](https://github.com/BlackrockDigital/startbootstrap-sb-admin-2) 
 * [Django](https://github.com/django/django) 
+* [Gensim](https://github.com/RaRe-Technologies/gensim)
