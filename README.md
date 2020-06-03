@@ -33,7 +33,6 @@ After downloading the project file, you have to open a command line with Python 
 You can install necessary python libraries with typing the following command in to your command line.
 
 
-
 ```
 pip install -r requirements.txt
 ```
@@ -55,6 +54,21 @@ or
 ```
 python3 generateModel.py
 ```
+## Additional Note (If you want to update the data dump.)
+
+If you want to update the doc2vec model and the dataframes used in the system with latest datadump, you can download the data dump from [https://archive.org/download/stackexchange/ai.stackexchange.com.7z](https://archive.org/download/stackexchange/ai.stackexchange.com.7z) and repace Posts.xml and Users.xml files in the root directory with the new ones. Now, you have to run both Task1 and Task2 ipynb files and they will generate necessary dataframes in predefined paths. Finally, you have to run following command again in the command line to generate the updated mode.
+
+
+```
+python generateModel.py
+```
+
+or
+
+```
+python3 generateModel.py
+```
+
 ## Running
 
 Running the system is fairly easy after installing necessary python libraries.
