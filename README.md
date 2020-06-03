@@ -4,7 +4,7 @@
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-##Important Keynote
+## Important Keynote
 
 You may want to read more about this project before working on the coding part.
 
