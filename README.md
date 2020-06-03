@@ -4,6 +4,12 @@
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
+##Important Keynote
+
+You may want to read more about this project before working on the coding part.
+
+Regarding the third and fourth tasks, we used DOC2VEC after some data analysis and comparison. There is also an aspect of context in our project. We want to return the most similar question based on the user’s asked question. We selected random examples and examined the original question and the related ones. We concluded that DOC2VEC returns better results than TFIDF contextually. You can find the data regarding to why we chose DOC2VEC instead of TFIDF under DOC2VEC.ipynb and TFIDF.ipynb files. Around line 22 we showed how DOC2VEC returns more related questions than TFIDF. For more details please check the Final_Report.
+
 ### Prerequisites
 
 Download the project by cloning the following link or download the zip version from Github.
