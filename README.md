@@ -1,4 +1,4 @@
-# CQA
+# Posted your question to CQA sites. Now what? Just wait? - Towards developing the next step...
 
 ## Getting Started
 
