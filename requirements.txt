@@ -2,7 +2,7 @@ requests==2.23.0
 pandas==0.25.3
 imbalanced_learn==0.6.2
 gensim==3.8.3
-numpy==1.18.4
+numpy==1.22.0
 imblearn==0.0
 scikit_learn==0.23.1
 django==3.0.7
